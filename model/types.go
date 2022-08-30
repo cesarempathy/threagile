@@ -4,11 +4,13 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/threagile/threagile/colors"
+	"log"
 	"regexp"
 	"sort"
 	"strings"
 	"time"
+
+	"github.com/threagile/threagile/colors"
 )
 
 const ThreagileVersion = "1.0.0" // Also update into example and stub model files and openapi.yaml
@@ -2946,6 +2948,52 @@ type Risk struct {
 	DataBreachProbability           DataBreachProbability      `json:"data_breach_probability"`
 	DataBreachTechnicalAssetIDs     []string                   `json:"data_breach_technical_assets"`
 	// TODO: refactor all "Id" here to "ID"?
+}
+type DDFinding struct {
+	Title       string `json:"title"`
+	Description string `json:"description"`
+	Severity    string `json:"severity"`
+	Mitigation  string `json:"mitigation"`
+	Date        string `json:"date"`
+	Cve         string `json:"cve"`
+	Cwe         int    `json:"cwe"`
+	Cvssv3      string `json:"cvssv3"`
+	FilePath    string `json:"file_path"`
+	Line        int    `json:"line"`
+	Impact      string `json:"impact"`
+	Endpoints   []struct {
+		Host string `json:"host"`
+	} `json:"endpoints"`
+}
+type DefectDojoFindings struct {
+	Findings []DDFinding `json:"findings"`
+}
+
+func (what Risk) ToDefectDojoFinding() DDFinding {
+
+	re, err := regexp.Compile(`[^\w]`)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	title := strings.Replace(re.ReplaceAllString(what.Title, " "), " b ", "", -1)
+
+	severity := what.Severity.Title()
+	if severity == "Elevated" {
+		severity = "High"
+	}
+	now := time.Now()
+	finding := DDFinding{
+		Title:       title,
+		Description: what.Category.Description,
+		Severity:    severity,
+		Mitigation:  what.Category.Mitigation,
+		Date:        now.Format("2006-01-02"),
+		Impact:      what.Category.Impact,
+		Cwe:         what.Category.CWE,
+	}
+
+	return finding
 }
 
 func (what Risk) GetRiskTracking() RiskTracking { // TODO: Unify function naming reagrding Get etc.

@@ -16,6 +16,7 @@ require (
 	github.com/phpdave11/gofpdi v1.0.13 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/richardlehane/msoleps v1.0.3 // indirect
+	github.com/truemilk/go-defectdojo v0.6.1 // indirect
 	github.com/wcharczuk/go-chart v2.0.1+incompatible
 	github.com/xuri/efp v0.0.0-20220603152613-6918739fd470 // indirect
 	github.com/xuri/excelize/v2 v2.6.0

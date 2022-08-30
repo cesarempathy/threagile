@@ -15,61 +15,6 @@ import (
 	"errors"
 	"flag"
 	"fmt"
-	"github.com/gin-gonic/gin"
-	"github.com/google/uuid"
-	"github.com/threagile/threagile/colors"
-	"github.com/threagile/threagile/macros/built-in/add-build-pipeline"
-	"github.com/threagile/threagile/macros/built-in/add-vault"
-	"github.com/threagile/threagile/macros/built-in/pretty-print"
-	"github.com/threagile/threagile/macros/built-in/remove-unused-tags"
-	"github.com/threagile/threagile/macros/built-in/seed-risk-tracking"
-	"github.com/threagile/threagile/macros/built-in/seed-tags"
-	"github.com/threagile/threagile/model"
-	"github.com/threagile/threagile/report"
-	"github.com/threagile/threagile/risks/built-in/accidental-secret-leak"
-	"github.com/threagile/threagile/risks/built-in/code-backdooring"
-	"github.com/threagile/threagile/risks/built-in/container-baseimage-backdooring"
-	"github.com/threagile/threagile/risks/built-in/container-platform-escape"
-	"github.com/threagile/threagile/risks/built-in/cross-site-request-forgery"
-	"github.com/threagile/threagile/risks/built-in/cross-site-scripting"
-	"github.com/threagile/threagile/risks/built-in/dos-risky-access-across-trust-boundary"
-	"github.com/threagile/threagile/risks/built-in/incomplete-model"
-	"github.com/threagile/threagile/risks/built-in/ldap-injection"
-	"github.com/threagile/threagile/risks/built-in/missing-authentication"
-	"github.com/threagile/threagile/risks/built-in/missing-authentication-second-factor"
-	"github.com/threagile/threagile/risks/built-in/missing-build-infrastructure"
-	"github.com/threagile/threagile/risks/built-in/missing-cloud-hardening"
-	"github.com/threagile/threagile/risks/built-in/missing-file-validation"
-	"github.com/threagile/threagile/risks/built-in/missing-hardening"
-	"github.com/threagile/threagile/risks/built-in/missing-identity-propagation"
-	"github.com/threagile/threagile/risks/built-in/missing-identity-provider-isolation"
-	"github.com/threagile/threagile/risks/built-in/missing-identity-store"
-	"github.com/threagile/threagile/risks/built-in/missing-network-segmentation"
-	"github.com/threagile/threagile/risks/built-in/missing-vault"
-	"github.com/threagile/threagile/risks/built-in/missing-vault-isolation"
-	"github.com/threagile/threagile/risks/built-in/missing-waf"
-	"github.com/threagile/threagile/risks/built-in/mixed-targets-on-shared-runtime"
-	"github.com/threagile/threagile/risks/built-in/path-traversal"
-	"github.com/threagile/threagile/risks/built-in/push-instead-of-pull-deployment"
-	"github.com/threagile/threagile/risks/built-in/search-query-injection"
-	"github.com/threagile/threagile/risks/built-in/server-side-request-forgery"
-	"github.com/threagile/threagile/risks/built-in/service-registry-poisoning"
-	"github.com/threagile/threagile/risks/built-in/sql-nosql-injection"
-	"github.com/threagile/threagile/risks/built-in/unchecked-deployment"
-	"github.com/threagile/threagile/risks/built-in/unencrypted-asset"
-	"github.com/threagile/threagile/risks/built-in/unencrypted-communication"
-	"github.com/threagile/threagile/risks/built-in/unguarded-access-from-internet"
-	"github.com/threagile/threagile/risks/built-in/unguarded-direct-datastore-access"
-	"github.com/threagile/threagile/risks/built-in/unnecessary-communication-link"
-	"github.com/threagile/threagile/risks/built-in/unnecessary-data-asset"
-	"github.com/threagile/threagile/risks/built-in/unnecessary-data-transfer"
-	"github.com/threagile/threagile/risks/built-in/unnecessary-technical-asset"
-	"github.com/threagile/threagile/risks/built-in/untrusted-deserialization"
-	"github.com/threagile/threagile/risks/built-in/wrong-communication-link-content"
-	"github.com/threagile/threagile/risks/built-in/wrong-trust-boundary-content"
-	"github.com/threagile/threagile/risks/built-in/xml-external-entity"
-	"golang.org/x/crypto/argon2"
-	"gopkg.in/yaml.v3"
 	"hash/fnv"
 	"io"
 	"io/ioutil"
@@ -85,6 +30,62 @@ import (
 	"strings"
 	"sync"
 	"time"
+
+	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
+	"github.com/threagile/threagile/colors"
+	add_build_pipeline "github.com/threagile/threagile/macros/built-in/add-build-pipeline"
+	add_vault "github.com/threagile/threagile/macros/built-in/add-vault"
+	pretty_print "github.com/threagile/threagile/macros/built-in/pretty-print"
+	remove_unused_tags "github.com/threagile/threagile/macros/built-in/remove-unused-tags"
+	seed_risk_tracking "github.com/threagile/threagile/macros/built-in/seed-risk-tracking"
+	seed_tags "github.com/threagile/threagile/macros/built-in/seed-tags"
+	"github.com/threagile/threagile/model"
+	"github.com/threagile/threagile/report"
+	accidental_secret_leak "github.com/threagile/threagile/risks/built-in/accidental-secret-leak"
+	code_backdooring "github.com/threagile/threagile/risks/built-in/code-backdooring"
+	container_baseimage_backdooring "github.com/threagile/threagile/risks/built-in/container-baseimage-backdooring"
+	container_platform_escape "github.com/threagile/threagile/risks/built-in/container-platform-escape"
+	cross_site_request_forgery "github.com/threagile/threagile/risks/built-in/cross-site-request-forgery"
+	cross_site_scripting "github.com/threagile/threagile/risks/built-in/cross-site-scripting"
+	dos_risky_access_across_trust_boundary "github.com/threagile/threagile/risks/built-in/dos-risky-access-across-trust-boundary"
+	incomplete_model "github.com/threagile/threagile/risks/built-in/incomplete-model"
+	ldap_injection "github.com/threagile/threagile/risks/built-in/ldap-injection"
+	missing_authentication "github.com/threagile/threagile/risks/built-in/missing-authentication"
+	missing_authentication_second_factor "github.com/threagile/threagile/risks/built-in/missing-authentication-second-factor"
+	missing_build_infrastructure "github.com/threagile/threagile/risks/built-in/missing-build-infrastructure"
+	missing_cloud_hardening "github.com/threagile/threagile/risks/built-in/missing-cloud-hardening"
+	missing_file_validation "github.com/threagile/threagile/risks/built-in/missing-file-validation"
+	missing_hardening "github.com/threagile/threagile/risks/built-in/missing-hardening"
+	missing_identity_propagation "github.com/threagile/threagile/risks/built-in/missing-identity-propagation"
+	missing_identity_provider_isolation "github.com/threagile/threagile/risks/built-in/missing-identity-provider-isolation"
+	missing_identity_store "github.com/threagile/threagile/risks/built-in/missing-identity-store"
+	missing_network_segmentation "github.com/threagile/threagile/risks/built-in/missing-network-segmentation"
+	missing_vault "github.com/threagile/threagile/risks/built-in/missing-vault"
+	missing_vault_isolation "github.com/threagile/threagile/risks/built-in/missing-vault-isolation"
+	missing_waf "github.com/threagile/threagile/risks/built-in/missing-waf"
+	mixed_targets_on_shared_runtime "github.com/threagile/threagile/risks/built-in/mixed-targets-on-shared-runtime"
+	path_traversal "github.com/threagile/threagile/risks/built-in/path-traversal"
+	push_instead_of_pull_deployment "github.com/threagile/threagile/risks/built-in/push-instead-of-pull-deployment"
+	search_query_injection "github.com/threagile/threagile/risks/built-in/search-query-injection"
+	server_side_request_forgery "github.com/threagile/threagile/risks/built-in/server-side-request-forgery"
+	service_registry_poisoning "github.com/threagile/threagile/risks/built-in/service-registry-poisoning"
+	sql_nosql_injection "github.com/threagile/threagile/risks/built-in/sql-nosql-injection"
+	unchecked_deployment "github.com/threagile/threagile/risks/built-in/unchecked-deployment"
+	unencrypted_asset "github.com/threagile/threagile/risks/built-in/unencrypted-asset"
+	unencrypted_communication "github.com/threagile/threagile/risks/built-in/unencrypted-communication"
+	unguarded_access_from_internet "github.com/threagile/threagile/risks/built-in/unguarded-access-from-internet"
+	unguarded_direct_datastore_access "github.com/threagile/threagile/risks/built-in/unguarded-direct-datastore-access"
+	unnecessary_communication_link "github.com/threagile/threagile/risks/built-in/unnecessary-communication-link"
+	unnecessary_data_asset "github.com/threagile/threagile/risks/built-in/unnecessary-data-asset"
+	unnecessary_data_transfer "github.com/threagile/threagile/risks/built-in/unnecessary-data-transfer"
+	unnecessary_technical_asset "github.com/threagile/threagile/risks/built-in/unnecessary-technical-asset"
+	untrusted_deserialization "github.com/threagile/threagile/risks/built-in/untrusted-deserialization"
+	wrong_communication_link_content "github.com/threagile/threagile/risks/built-in/wrong-communication-link-content"
+	wrong_trust_boundary_content "github.com/threagile/threagile/risks/built-in/wrong-trust-boundary-content"
+	xml_external_entity "github.com/threagile/threagile/risks/built-in/xml-external-entity"
+	"golang.org/x/crypto/argon2"
+	"gopkg.in/yaml.v3"
 )
 
 const keepDiagramSourceFiles = false
@@ -93,6 +94,7 @@ const defaultGraphvizDPI, maxGraphvizDPI = 120, 240
 const backupHistoryFilesToKeep = 50
 
 const baseFolder, reportFilename, excelRisksFilename, excelTagsFilename, jsonRisksFilename, jsonTechnicalAssetsFilename, jsonStatsFilename, dataFlowDiagramFilenameDOT, dataFlowDiagramFilenamePNG, dataAssetDiagramFilenameDOT, dataAssetDiagramFilenamePNG, graphvizDataFlowDiagramConversionCall, graphvizDataAssetDiagramConversionCall = "/data", "report.pdf", "risks.xlsx", "tags.xlsx", "risks.json", "technical-assets.json", "stats.json", "data-flow-diagram.gv", "data-flow-diagram.png", "data-asset-diagram.gv", "data-asset-diagram.png", "render-data-flow-diagram.sh", "render-data-asset-diagram.sh"
+const defectDojoFile = "dd-risks.json"
 
 var globalLock sync.Mutex
 var successCount, errorCount = 0, 0
@@ -104,7 +106,7 @@ var drawSpaceLinesForLayoutUnfortunatelyFurtherSeparatesAllRanks = true
 var buildTimestamp = ""
 
 var modelFilename, templateFilename /*, diagramFilename, reportFilename, graphvizConversion*/ *string
-var createExampleModel, createStubModel, createEditingSupport, verbose, ignoreOrphanedRiskTracking, generateDataFlowDiagram, generateDataAssetDiagram, generateRisksJSON, generateTechnicalAssetsJSON, generateStatsJSON, generateRisksExcel, generateTagsExcel, generateReportPDF *bool
+var createExampleModel, createStubModel, createEditingSupport, verbose, ignoreOrphanedRiskTracking, generateDataFlowDiagram, generateDataAssetDiagram, generateRisksJSON, generateDefectDojoReport, generateTechnicalAssetsJSON, generateStatsJSON, generateRisksExcel, generateTagsExcel, generateReportPDF *bool
 var outputDir, raaPlugin, skipRiskRules, riskRulesPlugins, executeModelMacro *string
 var customRiskRules map[string]model.CustomRiskRule
 var diagramDPI, serverPort *int
@@ -1092,13 +1094,16 @@ func doIt(inputFilename string, outputDirectory string) {
 		return
 	}
 
-	renderDataFlowDiagram, renderDataAssetDiagram, renderRisksJSON, renderTechnicalAssetsJSON, renderStatsJSON, renderRisksExcel, renderTagsExcel, renderPDF := *generateDataFlowDiagram, *generateDataAssetDiagram, *generateRisksJSON, *generateTechnicalAssetsJSON, *generateStatsJSON, *generateRisksExcel, *generateTagsExcel, *generateReportPDF
+	renderDataFlowDiagram, renderDataAssetDiagram, renderRisksJSON, renderDDJSON, renderTechnicalAssetsJSON, renderStatsJSON, renderRisksExcel, renderTagsExcel, renderPDF := *generateDataFlowDiagram, *generateDataAssetDiagram, *generateRisksJSON, *generateDefectDojoReport, *generateTechnicalAssetsJSON, *generateStatsJSON, *generateRisksExcel, *generateTagsExcel, *generateReportPDF
 	if renderPDF { // as the PDF report includes both diagrams
+		fmt.Println("renderPDF", renderDataFlowDiagram, renderDataAssetDiagram, renderRisksJSON, renderDDJSON, renderTechnicalAssetsJSON, renderStatsJSON, renderRisksExcel, renderTagsExcel, renderPDF)
+
 		renderDataFlowDiagram, renderDataAssetDiagram = true, true
 	}
 
 	// Data-flow Diagram rendering
 	if renderDataFlowDiagram {
+		fmt.Println("renderDataFlowDiagram")
 		gvFile := outputDirectory + "/" + dataFlowDiagramFilenameDOT
 		if !keepDiagramSourceFiles {
 			tmpFileGV, err := ioutil.TempFile(model.TempFolder, dataFlowDiagramFilenameDOT)
@@ -1128,6 +1133,12 @@ func doIt(inputFilename string, outputDirectory string) {
 			fmt.Println("Writing risks json")
 		}
 		report.WriteRisksJSON(outputDirectory + "/" + jsonRisksFilename)
+	}
+	if renderDDJSON {
+		if *verbose {
+			fmt.Println("Defect Dojo Writing risks json")
+		}
+		report.WriteRisksDefectDojo(outputDirectory + "/" + defectDojoFile)
 	}
 
 	// technical assets json
@@ -1350,9 +1361,9 @@ func execute(context *gin.Context, dryRun bool) (yamlContent []byte, ok bool) {
 	defer os.Remove(tmpResultFile.Name())
 
 	if dryRun {
-		doItViaRuntimeCall(yamlFile, tmpOutputDir, *executeModelMacro, *raaPlugin, *riskRulesPlugins, *skipRiskRules, *ignoreOrphanedRiskTracking, false, false, false, false, false, true, true, true, 40)
+		doItViaRuntimeCall(yamlFile, tmpOutputDir, *executeModelMacro, *raaPlugin, *riskRulesPlugins, *skipRiskRules, *ignoreOrphanedRiskTracking, false, false, false, false, false, false, true, true, true, 40)
 	} else {
-		doItViaRuntimeCall(yamlFile, tmpOutputDir, *executeModelMacro, *raaPlugin, *riskRulesPlugins, *skipRiskRules, *ignoreOrphanedRiskTracking, true, true, true, true, true, true, true, true, dpi)
+		doItViaRuntimeCall(yamlFile, tmpOutputDir, *executeModelMacro, *raaPlugin, *riskRulesPlugins, *skipRiskRules, *ignoreOrphanedRiskTracking, true, true, true, true, true, true, true, true, true, dpi)
 	}
 	checkErr(err)
 
@@ -1390,7 +1401,7 @@ func execute(context *gin.Context, dryRun bool) (yamlContent []byte, ok bool) {
 
 // ultimately to avoid any in-process memory and/or data leaks by the used third party libs like PDF generation: exec and quit
 func doItViaRuntimeCall(modelFile string, outputDir string, executeModelMacro string, raaPlugin string, customRiskRulesPlugins string, skipRiskRules string, ignoreOrphanedRiskTracking bool,
-	generateDataFlowDiagram, generateDataAssetDiagram, generateReportPdf, generateRisksExcel, generateTagsExcel, generateRisksJSON, generateTechnicalAssetsJSON, generateStatsJSON bool,
+	generateDataFlowDiagram, generateDataAssetDiagram, generateReportPdf, generateRisksExcel, generateTagsExcel, generateRisksJSON, generateDefectDojoReport, generateTechnicalAssetsJSON, generateStatsJSON bool,
 	dpi int) {
 	// Remember to also add the same args to the exec based sub-process calls!
 	var cmd *exec.Cmd
@@ -1418,6 +1429,9 @@ func doItViaRuntimeCall(modelFile string, outputDir string, executeModelMacro st
 	}
 	if generateRisksJSON {
 		args = append(args, "-generate-risks-json")
+	}
+	if generateDefectDojoReport {
+		args = append(args, "-generate-dd-json")
 	}
 	if generateTechnicalAssetsJSON {
 		args = append(args, "-generate-technical-assets-json")
@@ -1908,7 +1922,7 @@ func analyzeModelOnServerDirectly(context *gin.Context) {
 
 	err = ioutil.WriteFile(tmpModelFile.Name(), []byte(yamlText), 0400)
 
-	doItViaRuntimeCall(tmpModelFile.Name(), tmpOutputDir, *executeModelMacro, *raaPlugin, *riskRulesPlugins, *skipRiskRules, *ignoreOrphanedRiskTracking, true, true, true, true, true, true, true, true, dpi)
+	doItViaRuntimeCall(tmpModelFile.Name(), tmpOutputDir, *executeModelMacro, *raaPlugin, *riskRulesPlugins, *skipRiskRules, *ignoreOrphanedRiskTracking, true, true, true, true, true, true, true, true, true, dpi)
 	if err != nil {
 		handleErrorInServiceCall(err, context)
 		return
@@ -2023,42 +2037,42 @@ func streamResponse(context *gin.Context, responseType responseType) {
 	defer os.RemoveAll(tmpOutputDir)
 	err = ioutil.WriteFile(tmpModelFile.Name(), []byte(yamlText), 0400)
 	if responseType == dataFlowDiagram {
-		doItViaRuntimeCall(tmpModelFile.Name(), tmpOutputDir, *executeModelMacro, *raaPlugin, *riskRulesPlugins, *skipRiskRules, *ignoreOrphanedRiskTracking, true, false, false, false, false, false, false, false, dpi)
+		doItViaRuntimeCall(tmpModelFile.Name(), tmpOutputDir, *executeModelMacro, *raaPlugin, *riskRulesPlugins, *skipRiskRules, *ignoreOrphanedRiskTracking, true, false, false, false, false, false, false, false, false, dpi)
 		if err != nil {
 			handleErrorInServiceCall(err, context)
 			return
 		}
 		context.File(tmpOutputDir + "/" + dataFlowDiagramFilenamePNG)
 	} else if responseType == dataAssetDiagram {
-		doItViaRuntimeCall(tmpModelFile.Name(), tmpOutputDir, *executeModelMacro, *raaPlugin, *riskRulesPlugins, *skipRiskRules, *ignoreOrphanedRiskTracking, false, true, false, false, false, false, false, false, dpi)
+		doItViaRuntimeCall(tmpModelFile.Name(), tmpOutputDir, *executeModelMacro, *raaPlugin, *riskRulesPlugins, *skipRiskRules, *ignoreOrphanedRiskTracking, false, true, false, false, false, false, false, false, false, dpi)
 		if err != nil {
 			handleErrorInServiceCall(err, context)
 			return
 		}
 		context.File(tmpOutputDir + "/" + dataAssetDiagramFilenamePNG)
 	} else if responseType == reportPDF {
-		doItViaRuntimeCall(tmpModelFile.Name(), tmpOutputDir, *executeModelMacro, *raaPlugin, *riskRulesPlugins, *skipRiskRules, *ignoreOrphanedRiskTracking, false, false, true, false, false, false, false, false, dpi)
+		doItViaRuntimeCall(tmpModelFile.Name(), tmpOutputDir, *executeModelMacro, *raaPlugin, *riskRulesPlugins, *skipRiskRules, *ignoreOrphanedRiskTracking, false, false, true, false, false, false, false, false, false, dpi)
 		if err != nil {
 			handleErrorInServiceCall(err, context)
 			return
 		}
 		context.FileAttachment(tmpOutputDir+"/"+reportFilename, reportFilename)
 	} else if responseType == risksExcel {
-		doItViaRuntimeCall(tmpModelFile.Name(), tmpOutputDir, *executeModelMacro, *raaPlugin, *riskRulesPlugins, *skipRiskRules, *ignoreOrphanedRiskTracking, false, false, false, true, false, false, false, false, dpi)
+		doItViaRuntimeCall(tmpModelFile.Name(), tmpOutputDir, *executeModelMacro, *raaPlugin, *riskRulesPlugins, *skipRiskRules, *ignoreOrphanedRiskTracking, false, false, false, true, false, false, false, false, false, dpi)
 		if err != nil {
 			handleErrorInServiceCall(err, context)
 			return
 		}
 		context.FileAttachment(tmpOutputDir+"/"+excelRisksFilename, excelRisksFilename)
 	} else if responseType == tagsExcel {
-		doItViaRuntimeCall(tmpModelFile.Name(), tmpOutputDir, *executeModelMacro, *raaPlugin, *riskRulesPlugins, *skipRiskRules, *ignoreOrphanedRiskTracking, false, false, false, false, true, false, false, false, dpi)
+		doItViaRuntimeCall(tmpModelFile.Name(), tmpOutputDir, *executeModelMacro, *raaPlugin, *riskRulesPlugins, *skipRiskRules, *ignoreOrphanedRiskTracking, false, false, false, false, true, false, false, false, false, dpi)
 		if err != nil {
 			handleErrorInServiceCall(err, context)
 			return
 		}
 		context.FileAttachment(tmpOutputDir+"/"+excelTagsFilename, excelTagsFilename)
 	} else if responseType == risksJSON {
-		doItViaRuntimeCall(tmpModelFile.Name(), tmpOutputDir, *executeModelMacro, *raaPlugin, *riskRulesPlugins, *skipRiskRules, *ignoreOrphanedRiskTracking, false, false, false, false, false, true, false, false, dpi)
+		doItViaRuntimeCall(tmpModelFile.Name(), tmpOutputDir, *executeModelMacro, *raaPlugin, *riskRulesPlugins, *skipRiskRules, *ignoreOrphanedRiskTracking, false, false, false, false, false, true, false, false, false, dpi)
 		if err != nil {
 			handleErrorInServiceCall(err, context)
 			return
@@ -2070,7 +2084,7 @@ func streamResponse(context *gin.Context, responseType responseType) {
 		}
 		context.Data(http.StatusOK, "application/json", json) // stream directly with JSON content-type in response instead of file download
 	} else if responseType == technicalAssetsJSON {
-		doItViaRuntimeCall(tmpModelFile.Name(), tmpOutputDir, *executeModelMacro, *raaPlugin, *riskRulesPlugins, *skipRiskRules, *ignoreOrphanedRiskTracking, false, false, false, false, false, true, true, false, dpi)
+		doItViaRuntimeCall(tmpModelFile.Name(), tmpOutputDir, *executeModelMacro, *raaPlugin, *riskRulesPlugins, *skipRiskRules, *ignoreOrphanedRiskTracking, false, false, false, false, false, true, false, true, false, dpi)
 		if err != nil {
 			handleErrorInServiceCall(err, context)
 			return
@@ -2082,7 +2096,7 @@ func streamResponse(context *gin.Context, responseType responseType) {
 		}
 		context.Data(http.StatusOK, "application/json", json) // stream directly with JSON content-type in response instead of file download
 	} else if responseType == statsJSON {
-		doItViaRuntimeCall(tmpModelFile.Name(), tmpOutputDir, *executeModelMacro, *raaPlugin, *riskRulesPlugins, *skipRiskRules, *ignoreOrphanedRiskTracking, false, false, false, false, false, false, false, true, dpi)
+		doItViaRuntimeCall(tmpModelFile.Name(), tmpOutputDir, *executeModelMacro, *raaPlugin, *riskRulesPlugins, *skipRiskRules, *ignoreOrphanedRiskTracking, false, false, false, false, false, false, false, false, true, dpi)
 		if err != nil {
 			handleErrorInServiceCall(err, context)
 			return
@@ -3575,6 +3589,7 @@ func parseCommandlineArgs() {
 	generateDataFlowDiagram = flag.Bool("generate-data-flow-diagram", true, "generate data-flow diagram")
 	generateDataAssetDiagram = flag.Bool("generate-data-asset-diagram", true, "generate data asset diagram")
 	generateRisksJSON = flag.Bool("generate-risks-json", true, "generate risks json")
+	generateDefectDojoReport = flag.Bool("generate-defect-dojo-json", true, "generate defect dojo risk json")
 	generateTechnicalAssetsJSON = flag.Bool("generate-technical-assets-json", true, "generate technical assets json")
 	generateStatsJSON = flag.Bool("generate-stats-json", true, "generate stats json")
 	generateRisksExcel = flag.Bool("generate-risks-excel", true, "generate risks excel")

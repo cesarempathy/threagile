@@ -2,8 +2,10 @@ package report
 
 import (
 	"encoding/json"
-	"github.com/threagile/threagile/model"
 	"io/ioutil"
+	"os"
+
+	"github.com/threagile/threagile/model"
 )
 
 func WriteRisksJSON(filename string) {
@@ -23,6 +25,26 @@ func WriteRisksJSON(filename string) {
 	err = ioutil.WriteFile(filename, jsonBytes, 0644)
 	if err != nil {
 		panic(err)
+	}
+}
+
+func WriteRisksDefectDojo(filename string) {
+	result := make([]model.DDFinding, 0)
+	for _, risk := range model.AllRisks() {
+		result = append(result, risk.ToDefectDojoFinding())
+	}
+	findings := model.DefectDojoFindings{Findings: result}
+	jsonBytes, err := json.Marshal(findings)
+	if err != nil {
+		panic(err)
+	}
+	err = ioutil.WriteFile(filename, jsonBytes, 0644)
+	if err != nil {
+		panic(err)
+	}
+	uri := os.Getenv("DOJO_URI")
+	if len(uri) > 0 {
+		ExportFindings(filename)
 	}
 }
 
