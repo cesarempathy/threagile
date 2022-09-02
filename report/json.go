@@ -31,7 +31,9 @@ func WriteRisksJSON(filename string) {
 func WriteRisksDefectDojo(filename string) {
 	result := make([]model.DDFinding, 0)
 	for _, risk := range model.AllRisks() {
-		result = append(result, risk.ToDefectDojoFinding())
+		if risk.RiskStatus.IsStillAtRisk() {
+			result = append(result, risk.ToDefectDojoFinding())
+		}
 	}
 	findings := model.DefectDojoFindings{Findings: result}
 	jsonBytes, err := json.Marshal(findings)
