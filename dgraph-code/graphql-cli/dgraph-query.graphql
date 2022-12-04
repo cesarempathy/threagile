@@ -1,0 +1,11 @@
+query {
+  test(func: has(TechAsset.name)){
+	TechAsset.name
+  TechAsset.communication_links{
+			CommunicationLink.protocol
+      CommunicationLink.tech_asset_to{
+				TechAsset.technology
+    }
+  }
+  }
+}

@@ -1,0 +1,58 @@
+mutation AddDataAssets {
+  addDataAsset(
+    input: {
+      description: "Customer Contracts (PDF)"
+      usage: "business"
+      origin: "Customer"
+      owner: "Company XYZ"
+      quantity: "many"
+      confidentiality: "confidential"
+      integrity: "critical"
+      availability: "operational"
+      justification_cia_rating: "Contract data might contain financial data as well as personally identifiable information (PII). The integrity and availability of contract data is required for clearing payment disputes."
+    }
+  )
+}
+
+mutation MyMutation {
+  addTechAsset(
+    input: {
+      description: "Customer Web Client"
+      type: "external-entity"
+      usage: "business"
+      used_as_client_by_human: true
+      out_of_scope: false
+      size: "component"
+      technology: "browser"
+      internet: true
+      machine: "physical"
+      encryption: "none"
+      confidentiality: "internal"
+      integrity: "operational"
+      availability: "operational"
+      multi_tenant: false
+      redundant: false
+      custom_developed_parts: false
+    }
+  )
+}
+
+mutation MyMutation {
+  updateTechAsset(
+    input: {
+      filter: { id: "0xfffd8d6aba903e50" }
+      set: { data_assets_processed: { id: "0xfffd8d6aba903bdb" } }
+    }
+  )
+}
+
+query MyQuery {
+  queryTechAsset{
+    id
+  }
+}
+query getUser($login: String!) {
+  user(login: $login) {
+    name
+  }
+}

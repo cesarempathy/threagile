@@ -1,0 +1,9 @@
+{
+  "scripts": {
+    "graphql:codegen": "graphql codegen"
+  },
+  "devDependencies": {
+    "graphql-cli": "4.1.0",
+    "@graphql-cli/codegen": "2.4.18"
+  }
+}

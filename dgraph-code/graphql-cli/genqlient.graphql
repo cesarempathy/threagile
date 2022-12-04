@@ -1,0 +1,39 @@
+query getTechAsset($id: ID!) {
+  getTechAsset(id: $id) {
+    id
+    description: description
+  }
+}
+
+mutation createTechAsset($input: [AddTechAssetInput!]!) {
+  addTechAsset(input: $input) {
+    # id
+    # description: description
+    numUids
+  }
+}
+
+query getDataAsset($id: ID!) {
+  getDataAsset(id: $id) {
+    id
+    description: description
+  }
+}
+
+mutation createDataAsset($input: [AddDataAssetInput!]!) {
+  addDataAsset(input: $input) {
+    # id
+    # description: description
+    numUids
+  }
+}
+
+
+
+# # getUser gets the given user's name from their username.
+# query getUser($Login: String!) {
+#   user(login: $Login) {
+#     theirName: name
+#     createdAt
+#   }
+# }

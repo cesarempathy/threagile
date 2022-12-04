@@ -1,0 +1,19 @@
+CREATE (t1: TechAsset {name:'Context'})
+CREATE (t2: TechAsset {name:'QueryProcessor'})
+CREATE (c1: Connection {name:'Context2QueryProcessor', protocol:'HTTP'})
+CREATE (d1: DataAsset {name:'ContextData'})
+CREATE (tb1: TrustBoundary {name:'VPC'})
+CREATE (tb2: TrustBoundary {name:'k8s'})
+CREATE (tb1)
+
+MATCH (a:TechAsset), (b:Connection) WHERE a.name = 'Context' AND b.name = 'Context2QueryProcessor' CREATE (a)-[r:from]->(b) RETURN type(r)
+MATCH (a:Connection), (b:TechAsset) WHERE a.name = 'Context2QueryProcessor' AND b.name = 'QueryProcessor' CREATE (a)-[r:to]->(b) RETURN type(r)
+MATCH (a:TechAsset), (b: DataAsset) WHERE a.name = 'Context' AND b.name = 'ContextData' CREATE (a)-[r:process]->(b) RETURN type(r)
+MATCH (a:TechAsset), (b: DataAsset) WHERE a.name = 'QueryProcessor' AND b.name = 'ContextData' CREATE (a)-[r:process]->(b) RETURN type(r)
+MATCH (a:Connection), (b: DataAsset) WHERE a.name = 'Context2QueryProcessor' AND b.name = 'ContextData' CREATE (a)-[r:sends]->(b) RETURN type(r)
+
+MATCH (n) RETURN n
+match (n) with n limit 10000 DETACH DELETE n;
+// CREATE(t{id: '1', name: 'TechAsset1', description: 'TechAsset1 description'})
+// // CREATE (t:TechAsset{description: 'Contextualize Service', type: 'PROCESS' })-[:LIKES]->(c:Connection)
+// CREATE p = (TechAsset {name:'Context'})-[:from]->(Connection)-[:to]->(TechAsset {name:'QueryProcessor'}) RETURN p

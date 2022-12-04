@@ -3,7 +3,6 @@ package report
 import (
 	"encoding/json"
 	"io/ioutil"
-	"os"
 
 	"github.com/threagile/threagile/model"
 )
@@ -44,10 +43,10 @@ func WriteRisksDefectDojo(filename string) {
 	if err != nil {
 		panic(err)
 	}
-	uri := os.Getenv("DOJO_URI")
-	if len(uri) > 0 {
-		ExportFindings(filename)
-	}
+	// uri := os.Getenv("DOJO_URI")
+	// if len(uri) > 0 {
+	// 	ExportFindings(filename)
+	// }
 }
 
 // TODO: also a "data assets" json?

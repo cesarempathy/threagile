@@ -1,0 +1,81 @@
+type TechAsset {
+	id: ID! 
+  name: String! @id
+    description: String! @search(by:[fulltext])
+    type: String! @search(by:[exact])
+    usage: String! @search(by:[fulltext])
+    used_as_client_by_human: Boolean! @search
+    out_of_scope: Boolean! @search
+    Justification_out_of_scope: String @search(by:[fulltext])
+    size: String! @search(by:[exact])
+    technology: String! @search(by:[exact])
+    internet: Boolean! @search
+    machine: String! @search(by:[exact])
+    encryption: String! @search(by:[exact])
+    owner: String @search(by:[exact])
+	confidentiality: String! @search(by:[exact]) # values: public, internal, restricted, confidential, strictly-confidential
+	integrity: String! @search(by:[exact]) # values: archive, operational, important, critical, mission-critical
+	availability: String! @search(by:[exact]) # values: archive, operational, important, critical, mission-critical
+	justification_cia_rating: String @search(by:[fulltext])
+    tags: [String] @search(by:[exact])
+	multi_tenant: Boolean! @search
+	redundant: Boolean! @search
+	custom_developed_parts: Boolean! @search
+	data_formats_accepted: [String] @search(by:[exact]) # sequence of formats like: json, xml, serialization, file, csv
+	data_assets_processed: [DataAsset]
+	data_assets_stored: [DataAsset]
+	communication_links: [CommunicationLink] @hasInverse(field: tech_asset_from)
+	trust_boundary: TrustBoundary
+	runtime_environment: SharedRunTime
+}
+type CommunicationLink{
+	id: ID!
+	description: String! @search(by:[fulltext]) # Some Description
+	protocol: String! @search(by:[exact]) # values: see help
+	authentication: String! @search(by:[exact]) # values: none, credentials, session-id, token, client-certificate, two-factor
+	authorization: String! @search(by:[exact]) # values: none, technical-user, enduser-identity-propagation
+	tags: [String] @search(by:[exact])
+	vpn: Boolean! @search
+	ip_filtered: Boolean! @search
+	readonly: Boolean! @search
+	usage: String! @search(by:[exact]) # values: business, devops
+	data_assets_sent: [DataAsset]  # sequence of IDs to reference
+	data_assets_received: [DataAsset] # sequence of IDs to reference
+	tech_asset_from: TechAsset @hasInverse(field: communication_links) # sequence of IDs to reference
+	tech_asset_to: TechAsset
+}
+
+type DataAsset {
+	id: ID! 
+  name: String! @id
+	description: String! @search(by:[fulltext]) #Some Description
+	usage: String! @search(by:[exact]) # values: business, devops
+	tags: [String] @search(by:[exact]) # 
+	origin: String! @search(by:[exact]) #Some Origin
+	owner: String! @search(by:[exact]) #Some Owner
+	quantity: String! @search(by:[exact]) # values: very-few, few, many, very-many
+	confidentiality: String! @search(by:[exact]) # values: public, internal, restricted, confidential, strictly-confidential
+	integrity: String! @search(by:[exact]) # values: archive, operational, important, critical, mission-critical
+	availability: String! @search(by:[exact]) # values: archive, operational, important, critical, mission-critical
+	justification_cia_rating: String @search(by:[fulltext]) #Some Justification
+}
+
+type TrustBoundary {
+	id: ID! 
+  name: String! @id
+	description: String! @search(by:[fulltext]) #Some Description
+	owner: String! @search(by:[exact]) #Some Owner
+	justification: String! @search(by:[fulltext]) #Some Justification
+	tech_assets: [TechAsset] @hasInverse(field:trust_boundary)
+	nested_trust_boundaries: [TrustBoundary] @hasInverse(field:parent_trust_boundary)
+	parent_trust_boundary: TrustBoundary
+}
+
+type SharedRunTime {
+	id: ID! 
+  name: String! @id
+	description: String! @search(by:[fulltext]) #Some Description
+	owner: String! @search(by:[exact]) #Some Owner
+	justification: String! @search(by:[fulltext]) #Some Justification
+	tech_assets: [TechAsset] @hasInverse(field:runtime_environment)
+}

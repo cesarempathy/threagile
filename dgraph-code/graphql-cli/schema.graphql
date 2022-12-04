@@ -1,0 +1,1102 @@
+#######################
+# Input Schema
+#######################
+
+type TechAsset {
+	id: ID!
+	name: String! @id
+	description: String! @search(by: [fulltext])
+	type: String! @search(by: [exact])
+	usage: String! @search(by: [fulltext])
+	used_as_client_by_human: Boolean! @search
+	out_of_scope: Boolean! @search
+	Justification_out_of_scope: String @search(by: [fulltext])
+	size: String! @search(by: [exact])
+	technology: String! @search(by: [exact])
+	internet: Boolean! @search
+	machine: String! @search(by: [exact])
+	encryption: String! @search(by: [exact])
+	owner: String @search(by: [exact])
+	confidentiality: String! @search(by: [exact])
+	integrity: String! @search(by: [exact])
+	availability: String! @search(by: [exact])
+	justification_cia_rating: String @search(by: [fulltext])
+	tags: [String] @search(by: [exact])
+	multi_tenant: Boolean! @search
+	redundant: Boolean! @search
+	custom_developed_parts: Boolean! @search
+	data_formats_accepted: [String] @search(by: [exact])
+	data_assets_processed(filter: DataAssetFilter, order: DataAssetOrder, first: Int, offset: Int): [DataAsset]
+	data_assets_stored(filter: DataAssetFilter, order: DataAssetOrder, first: Int, offset: Int): [DataAsset]
+	communication_links(filter: CommunicationLinkFilter, order: CommunicationLinkOrder, first: Int, offset: Int): [CommunicationLink] @hasInverse(field: tech_asset_from)
+	trust_boundary(filter: TrustBoundaryFilter): TrustBoundary @hasInverse(field: tech_assets)
+	runtime_environment(filter: SharedRunTimeFilter): SharedRunTime @hasInverse(field: tech_assets)
+	data_assets_processedAggregate(filter: DataAssetFilter): DataAssetAggregateResult
+	data_assets_storedAggregate(filter: DataAssetFilter): DataAssetAggregateResult
+	communication_linksAggregate(filter: CommunicationLinkFilter): CommunicationLinkAggregateResult
+}
+
+type CommunicationLink {
+	id: ID!
+	description: String! @search(by: [fulltext])
+	protocol: String! @search(by: [exact])
+	authentication: String! @search(by: [exact])
+	authorization: String! @search(by: [exact])
+	tags: [String] @search(by: [exact])
+	vpn: Boolean! @search
+	ip_filtered: Boolean! @search
+	readonly: Boolean! @search
+	usage: String! @search(by: [exact])
+	data_assets_sent(filter: DataAssetFilter, order: DataAssetOrder, first: Int, offset: Int): [DataAsset]
+	data_assets_received(filter: DataAssetFilter, order: DataAssetOrder, first: Int, offset: Int): [DataAsset]
+	tech_asset_from(filter: TechAssetFilter): TechAsset @hasInverse(field: communication_links)
+	tech_asset_to(filter: TechAssetFilter): TechAsset
+	data_assets_sentAggregate(filter: DataAssetFilter): DataAssetAggregateResult
+	data_assets_receivedAggregate(filter: DataAssetFilter): DataAssetAggregateResult
+}
+
+type DataAsset {
+	id: ID!
+	name: String! @id
+	description: String! @search(by: [fulltext])
+	usage: String! @search(by: [exact])
+	tags: [String] @search(by: [exact])
+	origin: String! @search(by: [exact])
+	owner: String! @search(by: [exact])
+	quantity: String! @search(by: [exact])
+	confidentiality: String! @search(by: [exact])
+	integrity: String! @search(by: [exact])
+	availability: String! @search(by: [exact])
+	justification_cia_rating: String @search(by: [fulltext])
+}
+
+type TrustBoundary {
+	id: ID!
+	name: String! @id
+	description: String! @search(by: [fulltext])
+	owner: String! @search(by: [exact])
+	justification: String! @search(by: [fulltext])
+	tech_assets(filter: TechAssetFilter, order: TechAssetOrder, first: Int, offset: Int): [TechAsset] @hasInverse(field: trust_boundary)
+	nested_trust_boundaries(filter: TrustBoundaryFilter, order: TrustBoundaryOrder, first: Int, offset: Int): [TrustBoundary] @hasInverse(field: parent_trust_boundary)
+	parent_trust_boundary(filter: TrustBoundaryFilter): TrustBoundary @hasInverse(field: nested_trust_boundaries)
+	tech_assetsAggregate(filter: TechAssetFilter): TechAssetAggregateResult
+	nested_trust_boundariesAggregate(filter: TrustBoundaryFilter): TrustBoundaryAggregateResult
+}
+
+type SharedRunTime {
+	id: ID!
+	name: String! @id
+	description: String! @search(by: [fulltext])
+	owner: String! @search(by: [exact])
+	justification: String! @search(by: [fulltext])
+	tech_assets(filter: TechAssetFilter, order: TechAssetOrder, first: Int, offset: Int): [TechAsset] @hasInverse(field: runtime_environment)
+	tech_assetsAggregate(filter: TechAssetFilter): TechAssetAggregateResult
+}
+
+#######################
+# Extended Definitions
+#######################
+
+"""
+The Int64 scalar type represents a signed 64‐bit numeric non‐fractional value.
+Int64 can represent values in range [-(2^63),(2^63 - 1)].
+"""
+scalar Int64
+
+"""
+The DateTime scalar type represents date and time as a string in RFC3339 format.
+For example: "1985-04-12T23:20:50.52Z" represents 20 minutes and 50.52 seconds after the 23rd hour of April 12th, 1985 in UTC.
+"""
+scalar DateTime
+
+input IntRange{
+	min: Int!
+	max: Int!
+}
+
+input FloatRange{
+	min: Float!
+	max: Float!
+}
+
+input Int64Range{
+	min: Int64!
+	max: Int64!
+}
+
+input DateTimeRange{
+	min: DateTime!
+	max: DateTime!
+}
+
+input StringRange{
+	min: String!
+	max: String!
+}
+
+enum DgraphIndex {
+	int
+	int64
+	float
+	bool
+	hash
+	exact
+	term
+	fulltext
+	trigram
+	regexp
+	year
+	month
+	day
+	hour
+	geo
+}
+
+input AuthRule {
+	and: [AuthRule]
+	or: [AuthRule]
+	not: AuthRule
+	rule: String
+}
+
+enum HTTPMethod {
+	GET
+	POST
+	PUT
+	PATCH
+	DELETE
+}
+
+enum Mode {
+	BATCH
+	SINGLE
+}
+
+input CustomHTTP {
+	url: String!
+	method: HTTPMethod!
+	body: String
+	graphql: String
+	mode: Mode
+	forwardHeaders: [String!]
+	secretHeaders: [String!]
+	introspectionHeaders: [String!]
+	skipIntrospection: Boolean
+}
+
+type Point {
+	longitude: Float!
+	latitude: Float!
+}
+
+input PointRef {
+	longitude: Float!
+	latitude: Float!
+}
+
+input NearFilter {
+	distance: Float!
+	coordinate: PointRef!
+}
+
+input PointGeoFilter {
+	near: NearFilter
+	within: WithinFilter
+}
+
+type PointList {
+	points: [Point!]!
+}
+
+input PointListRef {
+	points: [PointRef!]!
+}
+
+type Polygon {
+	coordinates: [PointList!]!
+}
+
+input PolygonRef {
+	coordinates: [PointListRef!]!
+}
+
+type MultiPolygon {
+	polygons: [Polygon!]!
+}
+
+input MultiPolygonRef {
+	polygons: [PolygonRef!]!
+}
+
+input WithinFilter {
+	polygon: PolygonRef!
+}
+
+input ContainsFilter {
+	point: PointRef
+	polygon: PolygonRef
+}
+
+input IntersectsFilter {
+	polygon: PolygonRef
+	multiPolygon: MultiPolygonRef
+}
+
+input PolygonGeoFilter {
+	near: NearFilter
+	within: WithinFilter
+	contains: ContainsFilter
+	intersects: IntersectsFilter
+}
+
+input GenerateQueryParams {
+	get: Boolean
+	query: Boolean
+	password: Boolean
+	aggregate: Boolean
+}
+
+input GenerateMutationParams {
+	add: Boolean
+	update: Boolean
+	delete: Boolean
+}
+
+directive @hasInverse(field: String!) on FIELD_DEFINITION
+directive @search(by: [DgraphIndex!]) on FIELD_DEFINITION
+directive @dgraph(type: String, pred: String) on OBJECT | INTERFACE | FIELD_DEFINITION
+directive @id on FIELD_DEFINITION
+directive @withSubscription on OBJECT | INTERFACE | FIELD_DEFINITION
+directive @secret(field: String!, pred: String) on OBJECT | INTERFACE
+directive @auth(
+	password: AuthRule
+	query: AuthRule,
+	add: AuthRule,
+	update: AuthRule,
+	delete: AuthRule) on OBJECT | INTERFACE
+directive @custom(http: CustomHTTP, dql: String) on FIELD_DEFINITION
+directive @remote on OBJECT | INTERFACE | UNION | INPUT_OBJECT | ENUM
+directive @remoteResponse(name: String) on FIELD_DEFINITION
+directive @cascade(fields: [String]) on FIELD
+directive @lambda on FIELD_DEFINITION
+directive @lambdaOnMutate(add: Boolean, update: Boolean, delete: Boolean) on OBJECT | INTERFACE
+directive @cacheControl(maxAge: Int!) on QUERY
+directive @generate(
+	query: GenerateQueryParams,
+	mutation: GenerateMutationParams,
+	subscription: Boolean) on OBJECT | INTERFACE
+
+input IntFilter {
+	eq: Int
+	in: [Int]
+	le: Int
+	lt: Int
+	ge: Int
+	gt: Int
+	between: IntRange
+}
+
+input Int64Filter {
+	eq: Int64
+	in: [Int64]
+	le: Int64
+	lt: Int64
+	ge: Int64
+	gt: Int64
+	between: Int64Range
+}
+
+input FloatFilter {
+	eq: Float
+	in: [Float]
+	le: Float
+	lt: Float
+	ge: Float
+	gt: Float
+	between: FloatRange
+}
+
+input DateTimeFilter {
+	eq: DateTime
+	in: [DateTime]
+	le: DateTime
+	lt: DateTime
+	ge: DateTime
+	gt: DateTime
+	between: DateTimeRange
+}
+
+input StringTermFilter {
+	allofterms: String
+	anyofterms: String
+}
+
+input StringRegExpFilter {
+	regexp: String
+}
+
+input StringFullTextFilter {
+	alloftext: String
+	anyoftext: String
+}
+
+input StringExactFilter {
+	eq: String
+	in: [String]
+	le: String
+	lt: String
+	ge: String
+	gt: String
+	between: StringRange
+}
+
+input StringHashFilter {
+	eq: String
+	in: [String]
+}
+
+#######################
+# Generated Types
+#######################
+
+type AddCommunicationLinkPayload {
+	communicationLink(filter: CommunicationLinkFilter, order: CommunicationLinkOrder, first: Int, offset: Int): [CommunicationLink]
+	numUids: Int
+}
+
+type AddDataAssetPayload {
+	dataAsset(filter: DataAssetFilter, order: DataAssetOrder, first: Int, offset: Int): [DataAsset]
+	numUids: Int
+}
+
+type AddSharedRunTimePayload {
+	sharedRunTime(filter: SharedRunTimeFilter, order: SharedRunTimeOrder, first: Int, offset: Int): [SharedRunTime]
+	numUids: Int
+}
+
+type AddTechAssetPayload {
+	techAsset(filter: TechAssetFilter, order: TechAssetOrder, first: Int, offset: Int): [TechAsset]
+	numUids: Int
+}
+
+type AddTrustBoundaryPayload {
+	trustBoundary(filter: TrustBoundaryFilter, order: TrustBoundaryOrder, first: Int, offset: Int): [TrustBoundary]
+	numUids: Int
+}
+
+type CommunicationLinkAggregateResult {
+	count: Int
+	descriptionMin: String
+	descriptionMax: String
+	protocolMin: String
+	protocolMax: String
+	authenticationMin: String
+	authenticationMax: String
+	authorizationMin: String
+	authorizationMax: String
+	usageMin: String
+	usageMax: String
+}
+
+type DataAssetAggregateResult {
+	count: Int
+	nameMin: String
+	nameMax: String
+	descriptionMin: String
+	descriptionMax: String
+	usageMin: String
+	usageMax: String
+	originMin: String
+	originMax: String
+	ownerMin: String
+	ownerMax: String
+	quantityMin: String
+	quantityMax: String
+	confidentialityMin: String
+	confidentialityMax: String
+	integrityMin: String
+	integrityMax: String
+	availabilityMin: String
+	availabilityMax: String
+	justification_cia_ratingMin: String
+	justification_cia_ratingMax: String
+}
+
+type DeleteCommunicationLinkPayload {
+	communicationLink(filter: CommunicationLinkFilter, order: CommunicationLinkOrder, first: Int, offset: Int): [CommunicationLink]
+	msg: String
+	numUids: Int
+}
+
+type DeleteDataAssetPayload {
+	dataAsset(filter: DataAssetFilter, order: DataAssetOrder, first: Int, offset: Int): [DataAsset]
+	msg: String
+	numUids: Int
+}
+
+type DeleteSharedRunTimePayload {
+	sharedRunTime(filter: SharedRunTimeFilter, order: SharedRunTimeOrder, first: Int, offset: Int): [SharedRunTime]
+	msg: String
+	numUids: Int
+}
+
+type DeleteTechAssetPayload {
+	techAsset(filter: TechAssetFilter, order: TechAssetOrder, first: Int, offset: Int): [TechAsset]
+	msg: String
+	numUids: Int
+}
+
+type DeleteTrustBoundaryPayload {
+	trustBoundary(filter: TrustBoundaryFilter, order: TrustBoundaryOrder, first: Int, offset: Int): [TrustBoundary]
+	msg: String
+	numUids: Int
+}
+
+type SharedRunTimeAggregateResult {
+	count: Int
+	nameMin: String
+	nameMax: String
+	descriptionMin: String
+	descriptionMax: String
+	ownerMin: String
+	ownerMax: String
+	justificationMin: String
+	justificationMax: String
+}
+
+type TechAssetAggregateResult {
+	count: Int
+	nameMin: String
+	nameMax: String
+	descriptionMin: String
+	descriptionMax: String
+	typeMin: String
+	typeMax: String
+	usageMin: String
+	usageMax: String
+	Justification_out_of_scopeMin: String
+	Justification_out_of_scopeMax: String
+	sizeMin: String
+	sizeMax: String
+	technologyMin: String
+	technologyMax: String
+	machineMin: String
+	machineMax: String
+	encryptionMin: String
+	encryptionMax: String
+	ownerMin: String
+	ownerMax: String
+	confidentialityMin: String
+	confidentialityMax: String
+	integrityMin: String
+	integrityMax: String
+	availabilityMin: String
+	availabilityMax: String
+	justification_cia_ratingMin: String
+	justification_cia_ratingMax: String
+}
+
+type TrustBoundaryAggregateResult {
+	count: Int
+	nameMin: String
+	nameMax: String
+	descriptionMin: String
+	descriptionMax: String
+	ownerMin: String
+	ownerMax: String
+	justificationMin: String
+	justificationMax: String
+}
+
+type UpdateCommunicationLinkPayload {
+	communicationLink(filter: CommunicationLinkFilter, order: CommunicationLinkOrder, first: Int, offset: Int): [CommunicationLink]
+	numUids: Int
+}
+
+type UpdateDataAssetPayload {
+	dataAsset(filter: DataAssetFilter, order: DataAssetOrder, first: Int, offset: Int): [DataAsset]
+	numUids: Int
+}
+
+type UpdateSharedRunTimePayload {
+	sharedRunTime(filter: SharedRunTimeFilter, order: SharedRunTimeOrder, first: Int, offset: Int): [SharedRunTime]
+	numUids: Int
+}
+
+type UpdateTechAssetPayload {
+	techAsset(filter: TechAssetFilter, order: TechAssetOrder, first: Int, offset: Int): [TechAsset]
+	numUids: Int
+}
+
+type UpdateTrustBoundaryPayload {
+	trustBoundary(filter: TrustBoundaryFilter, order: TrustBoundaryOrder, first: Int, offset: Int): [TrustBoundary]
+	numUids: Int
+}
+
+#######################
+# Generated Enums
+#######################
+
+enum CommunicationLinkHasFilter {
+	description
+	protocol
+	authentication
+	authorization
+	tags
+	vpn
+	ip_filtered
+	readonly
+	usage
+	data_assets_sent
+	data_assets_received
+	tech_asset_from
+	tech_asset_to
+}
+
+enum CommunicationLinkOrderable {
+	description
+	protocol
+	authentication
+	authorization
+	usage
+}
+
+enum DataAssetHasFilter {
+	name
+	description
+	usage
+	tags
+	origin
+	owner
+	quantity
+	confidentiality
+	integrity
+	availability
+	justification_cia_rating
+}
+
+enum DataAssetOrderable {
+	name
+	description
+	usage
+	origin
+	owner
+	quantity
+	confidentiality
+	integrity
+	availability
+	justification_cia_rating
+}
+
+enum SharedRunTimeHasFilter {
+	name
+	description
+	owner
+	justification
+	tech_assets
+}
+
+enum SharedRunTimeOrderable {
+	name
+	description
+	owner
+	justification
+}
+
+enum TechAssetHasFilter {
+	name
+	description
+	type
+	usage
+	used_as_client_by_human
+	out_of_scope
+	Justification_out_of_scope
+	size
+	technology
+	internet
+	machine
+	encryption
+	owner
+	confidentiality
+	integrity
+	availability
+	justification_cia_rating
+	tags
+	multi_tenant
+	redundant
+	custom_developed_parts
+	data_formats_accepted
+	data_assets_processed
+	data_assets_stored
+	communication_links
+	trust_boundary
+	runtime_environment
+}
+
+enum TechAssetOrderable {
+	name
+	description
+	type
+	usage
+	Justification_out_of_scope
+	size
+	technology
+	machine
+	encryption
+	owner
+	confidentiality
+	integrity
+	availability
+	justification_cia_rating
+}
+
+enum TrustBoundaryHasFilter {
+	name
+	description
+	owner
+	justification
+	tech_assets
+	nested_trust_boundaries
+	parent_trust_boundary
+}
+
+enum TrustBoundaryOrderable {
+	name
+	description
+	owner
+	justification
+}
+
+#######################
+# Generated Inputs
+#######################
+
+input AddCommunicationLinkInput {
+	description: String!
+	protocol: String!
+	authentication: String!
+	authorization: String!
+	tags: [String]
+	vpn: Boolean!
+	ip_filtered: Boolean!
+	readonly: Boolean!
+	usage: String!
+	data_assets_sent: [DataAssetRef]
+	data_assets_received: [DataAssetRef]
+	tech_asset_from: TechAssetRef
+	tech_asset_to: TechAssetRef
+}
+
+input AddDataAssetInput {
+	name: String!
+	description: String!
+	usage: String!
+	tags: [String]
+	origin: String!
+	owner: String!
+	quantity: String!
+	confidentiality: String!
+	integrity: String!
+	availability: String!
+	justification_cia_rating: String
+}
+
+input AddSharedRunTimeInput {
+	name: String!
+	description: String!
+	owner: String!
+	justification: String!
+	tech_assets: [TechAssetRef]
+}
+
+input AddTechAssetInput {
+	name: String!
+	description: String!
+	type: String!
+	usage: String!
+	used_as_client_by_human: Boolean!
+	out_of_scope: Boolean!
+	Justification_out_of_scope: String
+	size: String!
+	technology: String!
+	internet: Boolean!
+	machine: String!
+	encryption: String!
+	owner: String
+	confidentiality: String!
+	integrity: String!
+	availability: String!
+	justification_cia_rating: String
+	tags: [String]
+	multi_tenant: Boolean!
+	redundant: Boolean!
+	custom_developed_parts: Boolean!
+	data_formats_accepted: [String]
+	data_assets_processed: [DataAssetRef]
+	data_assets_stored: [DataAssetRef]
+	communication_links: [CommunicationLinkRef]
+	trust_boundary: TrustBoundaryRef
+	runtime_environment: SharedRunTimeRef
+}
+
+input AddTrustBoundaryInput {
+	name: String!
+	description: String!
+	owner: String!
+	justification: String!
+	tech_assets: [TechAssetRef]
+	nested_trust_boundaries: [TrustBoundaryRef]
+	parent_trust_boundary: TrustBoundaryRef
+}
+
+input CommunicationLinkFilter {
+	id: [ID!]
+	description: StringFullTextFilter
+	protocol: StringExactFilter
+	authentication: StringExactFilter
+	authorization: StringExactFilter
+	tags: StringExactFilter
+	vpn: Boolean
+	ip_filtered: Boolean
+	readonly: Boolean
+	usage: StringExactFilter
+	has: [CommunicationLinkHasFilter]
+	and: [CommunicationLinkFilter]
+	or: [CommunicationLinkFilter]
+	not: CommunicationLinkFilter
+}
+
+input CommunicationLinkOrder {
+	asc: CommunicationLinkOrderable
+	desc: CommunicationLinkOrderable
+	then: CommunicationLinkOrder
+}
+
+input CommunicationLinkPatch {
+	description: String
+	protocol: String
+	authentication: String
+	authorization: String
+	tags: [String]
+	vpn: Boolean
+	ip_filtered: Boolean
+	readonly: Boolean
+	usage: String
+	data_assets_sent: [DataAssetRef]
+	data_assets_received: [DataAssetRef]
+	tech_asset_from: TechAssetRef
+	tech_asset_to: TechAssetRef
+}
+
+input CommunicationLinkRef {
+	id: ID
+	description: String
+	protocol: String
+	authentication: String
+	authorization: String
+	tags: [String]
+	vpn: Boolean
+	ip_filtered: Boolean
+	readonly: Boolean
+	usage: String
+	data_assets_sent: [DataAssetRef]
+	data_assets_received: [DataAssetRef]
+	tech_asset_from: TechAssetRef
+	tech_asset_to: TechAssetRef
+}
+
+input DataAssetFilter {
+	id: [ID!]
+	name: StringHashFilter
+	description: StringFullTextFilter
+	usage: StringExactFilter
+	tags: StringExactFilter
+	origin: StringExactFilter
+	owner: StringExactFilter
+	quantity: StringExactFilter
+	confidentiality: StringExactFilter
+	integrity: StringExactFilter
+	availability: StringExactFilter
+	justification_cia_rating: StringFullTextFilter
+	has: [DataAssetHasFilter]
+	and: [DataAssetFilter]
+	or: [DataAssetFilter]
+	not: DataAssetFilter
+}
+
+input DataAssetOrder {
+	asc: DataAssetOrderable
+	desc: DataAssetOrderable
+	then: DataAssetOrder
+}
+
+input DataAssetPatch {
+	description: String
+	usage: String
+	tags: [String]
+	origin: String
+	owner: String
+	quantity: String
+	confidentiality: String
+	integrity: String
+	availability: String
+	justification_cia_rating: String
+}
+
+input DataAssetRef {
+	id: ID
+	name: String
+	description: String
+	usage: String
+	tags: [String]
+	origin: String
+	owner: String
+	quantity: String
+	confidentiality: String
+	integrity: String
+	availability: String
+	justification_cia_rating: String
+}
+
+input SharedRunTimeFilter {
+	id: [ID!]
+	name: StringHashFilter
+	description: StringFullTextFilter
+	owner: StringExactFilter
+	justification: StringFullTextFilter
+	has: [SharedRunTimeHasFilter]
+	and: [SharedRunTimeFilter]
+	or: [SharedRunTimeFilter]
+	not: SharedRunTimeFilter
+}
+
+input SharedRunTimeOrder {
+	asc: SharedRunTimeOrderable
+	desc: SharedRunTimeOrderable
+	then: SharedRunTimeOrder
+}
+
+input SharedRunTimePatch {
+	description: String
+	owner: String
+	justification: String
+	tech_assets: [TechAssetRef]
+}
+
+input SharedRunTimeRef {
+	id: ID
+	name: String
+	description: String
+	owner: String
+	justification: String
+	tech_assets: [TechAssetRef]
+}
+
+input TechAssetFilter {
+	id: [ID!]
+	name: StringHashFilter
+	description: StringFullTextFilter
+	type: StringExactFilter
+	usage: StringFullTextFilter
+	used_as_client_by_human: Boolean
+	out_of_scope: Boolean
+	Justification_out_of_scope: StringFullTextFilter
+	size: StringExactFilter
+	technology: StringExactFilter
+	internet: Boolean
+	machine: StringExactFilter
+	encryption: StringExactFilter
+	owner: StringExactFilter
+	confidentiality: StringExactFilter
+	integrity: StringExactFilter
+	availability: StringExactFilter
+	justification_cia_rating: StringFullTextFilter
+	tags: StringExactFilter
+	multi_tenant: Boolean
+	redundant: Boolean
+	custom_developed_parts: Boolean
+	data_formats_accepted: StringExactFilter
+	has: [TechAssetHasFilter]
+	and: [TechAssetFilter]
+	or: [TechAssetFilter]
+	not: TechAssetFilter
+}
+
+input TechAssetOrder {
+	asc: TechAssetOrderable
+	desc: TechAssetOrderable
+	then: TechAssetOrder
+}
+
+input TechAssetPatch {
+	description: String
+	type: String
+	usage: String
+	used_as_client_by_human: Boolean
+	out_of_scope: Boolean
+	Justification_out_of_scope: String
+	size: String
+	technology: String
+	internet: Boolean
+	machine: String
+	encryption: String
+	owner: String
+	confidentiality: String
+	integrity: String
+	availability: String
+	justification_cia_rating: String
+	tags: [String]
+	multi_tenant: Boolean
+	redundant: Boolean
+	custom_developed_parts: Boolean
+	data_formats_accepted: [String]
+	data_assets_processed: [DataAssetRef]
+	data_assets_stored: [DataAssetRef]
+	communication_links: [CommunicationLinkRef]
+	trust_boundary: TrustBoundaryRef
+	runtime_environment: SharedRunTimeRef
+}
+
+input TechAssetRef {
+	id: ID
+	name: String
+	description: String
+	type: String
+	usage: String
+	used_as_client_by_human: Boolean
+	out_of_scope: Boolean
+	Justification_out_of_scope: String
+	size: String
+	technology: String
+	internet: Boolean
+	machine: String
+	encryption: String
+	owner: String
+	confidentiality: String
+	integrity: String
+	availability: String
+	justification_cia_rating: String
+	tags: [String]
+	multi_tenant: Boolean
+	redundant: Boolean
+	custom_developed_parts: Boolean
+	data_formats_accepted: [String]
+	data_assets_processed: [DataAssetRef]
+	data_assets_stored: [DataAssetRef]
+	communication_links: [CommunicationLinkRef]
+	trust_boundary: TrustBoundaryRef
+	runtime_environment: SharedRunTimeRef
+}
+
+input TrustBoundaryFilter {
+	id: [ID!]
+	name: StringHashFilter
+	description: StringFullTextFilter
+	owner: StringExactFilter
+	justification: StringFullTextFilter
+	has: [TrustBoundaryHasFilter]
+	and: [TrustBoundaryFilter]
+	or: [TrustBoundaryFilter]
+	not: TrustBoundaryFilter
+}
+
+input TrustBoundaryOrder {
+	asc: TrustBoundaryOrderable
+	desc: TrustBoundaryOrderable
+	then: TrustBoundaryOrder
+}
+
+input TrustBoundaryPatch {
+	description: String
+	owner: String
+	justification: String
+	tech_assets: [TechAssetRef]
+	nested_trust_boundaries: [TrustBoundaryRef]
+	parent_trust_boundary: TrustBoundaryRef
+}
+
+input TrustBoundaryRef {
+	id: ID
+	name: String
+	description: String
+	owner: String
+	justification: String
+	tech_assets: [TechAssetRef]
+	nested_trust_boundaries: [TrustBoundaryRef]
+	parent_trust_boundary: TrustBoundaryRef
+}
+
+input UpdateCommunicationLinkInput {
+	filter: CommunicationLinkFilter!
+	set: CommunicationLinkPatch
+	remove: CommunicationLinkPatch
+}
+
+input UpdateDataAssetInput {
+	filter: DataAssetFilter!
+	set: DataAssetPatch
+	remove: DataAssetPatch
+}
+
+input UpdateSharedRunTimeInput {
+	filter: SharedRunTimeFilter!
+	set: SharedRunTimePatch
+	remove: SharedRunTimePatch
+}
+
+input UpdateTechAssetInput {
+	filter: TechAssetFilter!
+	set: TechAssetPatch
+	remove: TechAssetPatch
+}
+
+input UpdateTrustBoundaryInput {
+	filter: TrustBoundaryFilter!
+	set: TrustBoundaryPatch
+	remove: TrustBoundaryPatch
+}
+
+#######################
+# Generated Query
+#######################
+
+type Query {
+	getTechAsset(id: ID, name: String): TechAsset
+	queryTechAsset(filter: TechAssetFilter, order: TechAssetOrder, first: Int, offset: Int): [TechAsset]
+	aggregateTechAsset(filter: TechAssetFilter): TechAssetAggregateResult
+	getCommunicationLink(id: ID!): CommunicationLink
+	queryCommunicationLink(filter: CommunicationLinkFilter, order: CommunicationLinkOrder, first: Int, offset: Int): [CommunicationLink]
+	aggregateCommunicationLink(filter: CommunicationLinkFilter): CommunicationLinkAggregateResult
+	getDataAsset(id: ID, name: String): DataAsset
+	queryDataAsset(filter: DataAssetFilter, order: DataAssetOrder, first: Int, offset: Int): [DataAsset]
+	aggregateDataAsset(filter: DataAssetFilter): DataAssetAggregateResult
+	getTrustBoundary(id: ID, name: String): TrustBoundary
+	queryTrustBoundary(filter: TrustBoundaryFilter, order: TrustBoundaryOrder, first: Int, offset: Int): [TrustBoundary]
+	aggregateTrustBoundary(filter: TrustBoundaryFilter): TrustBoundaryAggregateResult
+	getSharedRunTime(id: ID, name: String): SharedRunTime
+	querySharedRunTime(filter: SharedRunTimeFilter, order: SharedRunTimeOrder, first: Int, offset: Int): [SharedRunTime]
+	aggregateSharedRunTime(filter: SharedRunTimeFilter): SharedRunTimeAggregateResult
+}
+
+#######################
+# Generated Mutations
+#######################
+
+type Mutation {
+	addTechAsset(input: [AddTechAssetInput!]!, upsert: Boolean): AddTechAssetPayload
+	updateTechAsset(input: UpdateTechAssetInput!): UpdateTechAssetPayload
+	deleteTechAsset(filter: TechAssetFilter!): DeleteTechAssetPayload
+	addCommunicationLink(input: [AddCommunicationLinkInput!]!): AddCommunicationLinkPayload
+	updateCommunicationLink(input: UpdateCommunicationLinkInput!): UpdateCommunicationLinkPayload
+	deleteCommunicationLink(filter: CommunicationLinkFilter!): DeleteCommunicationLinkPayload
+	addDataAsset(input: [AddDataAssetInput!]!, upsert: Boolean): AddDataAssetPayload
+	updateDataAsset(input: UpdateDataAssetInput!): UpdateDataAssetPayload
+	deleteDataAsset(filter: DataAssetFilter!): DeleteDataAssetPayload
+	addTrustBoundary(input: [AddTrustBoundaryInput!]!, upsert: Boolean): AddTrustBoundaryPayload
+	updateTrustBoundary(input: UpdateTrustBoundaryInput!): UpdateTrustBoundaryPayload
+	deleteTrustBoundary(filter: TrustBoundaryFilter!): DeleteTrustBoundaryPayload
+	addSharedRunTime(input: [AddSharedRunTimeInput!]!, upsert: Boolean): AddSharedRunTimePayload
+	updateSharedRunTime(input: UpdateSharedRunTimeInput!): UpdateSharedRunTimePayload
+	deleteSharedRunTime(filter: SharedRunTimeFilter!): DeleteSharedRunTimePayload
+}
+
