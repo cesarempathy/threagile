@@ -63,9 +63,9 @@ type DataAsset {
 type TrustBoundary {
 	id: ID! 
   name: String! @id
-	description: String! @search(by:[fulltext]) #Some Description
-	owner: String! @search(by:[exact]) #Some Owner
-	justification: String! @search(by:[fulltext]) #Some Justification
+	description: String @search(by:[fulltext]) #Some Description
+	type: String @search(by:[exact]) #Some Owner
+	justification: String @search(by:[fulltext]) #Some Justification
 	tech_assets: [TechAsset] @hasInverse(field:trust_boundary)
 	nested_trust_boundaries: [TrustBoundary] @hasInverse(field:parent_trust_boundary)
 	parent_trust_boundary: TrustBoundary

@@ -13,16 +13,16 @@ import (
 func main() {
 	fmt.Println("Hello, World!")
 	client := graphql.NewClient("http://localhost:8080/graphql")
-	files := readFolder("/Users/madacluster/Projects/secops/threat-model/.cdktg.out/models/")
+	files := readFolder("/Users/cesar/Project/empathy/secops/threat-model/.cdktg.out/dist/")
 	for _, file := range files {
-		var modelInput model.ModelInput = readYamlFileModel("/Users/madacluster/Projects/secops/threat-model/.cdktg.out/models/" + file)
+		var modelInput model.ModelInput = readYamlFileModel("/Users/cesar/Project/empathy/secops/threat-model/.cdktg.out/dist/" + file)
 		// fmt.Println(modelInput)
 		// client := graphql.NewClient("https://nameless-brook-390012.eu-central-1.aws.cloud.dgraph.io/graphql")
-		UploadDataAssets(modelInput, client)
-		println("## TECH ASSETS ##")
-		UploadTechAssets(modelInput, client)
-		println("## TRUST BOUNDARIES ##")
-		UploadConnections(modelInput, client)
+		// UploadDataAssets(modelInput, client)
+		// println("## TECH ASSETS ##")
+		// UploadTechAssets(modelInput, client)
+		// println("## TRUST BOUNDARIES ##")
+		// UploadConnections(modelInput, client)
 		UploadTrustBoundaries(modelInput, client)
 	}
 }
