@@ -12,14 +12,19 @@ import (
 
 func main() {
 	fmt.Println("Hello, World!")
-	var modelInput model.ModelInput = readYamlFileModel("../../demo/example/threagile.yaml")
-	// fmt.Println(modelInput)
-	client := graphql.NewClient("https://nameless-brook-390012.eu-central-1.aws.cloud.dgraph.io/graphql")
-	// getTechAsset(context, graphqlClient, "threagile/threagile")
-	UploadDataAssets(modelInput, client)
-	println("## TECH ASSETS ##")
-	UploadTechAssets(modelInput, client)
-	// UploadConnections(modelInput, client)
+	client := graphql.NewClient("http://localhost:8080/graphql")
+	files := readFolder("/Users/madacluster/Projects/secops/threat-model/.cdktg.out/models/")
+	for _, file := range files {
+		var modelInput model.ModelInput = readYamlFileModel("/Users/madacluster/Projects/secops/threat-model/.cdktg.out/models/" + file)
+		// fmt.Println(modelInput)
+		// client := graphql.NewClient("https://nameless-brook-390012.eu-central-1.aws.cloud.dgraph.io/graphql")
+		UploadDataAssets(modelInput, client)
+		println("## TECH ASSETS ##")
+		UploadTechAssets(modelInput, client)
+		println("## TRUST BOUNDARIES ##")
+		UploadConnections(modelInput, client)
+		UploadTrustBoundaries(modelInput, client)
+	}
 }
 
 func readYamlFileModel(path string) model.ModelInput {
@@ -33,4 +38,16 @@ func readYamlFileModel(path string) model.ModelInput {
 		log.Fatalf("Unmarshal: %v", err)
 	}
 	return modelInput
+}
+
+func readFolder(path string) []string {
+	files, err := ioutil.ReadDir(path)
+	if err != nil {
+		log.Fatal(err)
+	}
+	var result []string = make([]string, 0)
+	for _, f := range files {
+		result = append(result, f.Name())
+	}
+	return result
 }

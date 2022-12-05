@@ -5,15 +5,15 @@
 type TechAsset {
 	id: ID!
 	name: String! @id
-	description: String! @search(by: [fulltext])
+	description: String @search(by: [fulltext])
 	type: String! @search(by: [exact])
 	usage: String! @search(by: [fulltext])
-	used_as_client_by_human: Boolean! @search
-	out_of_scope: Boolean! @search
+	used_as_client_by_human: Boolean @search
+	out_of_scope: Boolean @search
 	Justification_out_of_scope: String @search(by: [fulltext])
 	size: String! @search(by: [exact])
 	technology: String! @search(by: [exact])
-	internet: Boolean! @search
+	internet: Boolean @search
 	machine: String! @search(by: [exact])
 	encryption: String! @search(by: [exact])
 	owner: String @search(by: [exact])
@@ -22,9 +22,9 @@ type TechAsset {
 	availability: String! @search(by: [exact])
 	justification_cia_rating: String @search(by: [fulltext])
 	tags: [String] @search(by: [exact])
-	multi_tenant: Boolean! @search
-	redundant: Boolean! @search
-	custom_developed_parts: Boolean! @search
+	multi_tenant: Boolean @search
+	redundant: Boolean @search
+	custom_developed_parts: Boolean @search
 	data_formats_accepted: [String] @search(by: [exact])
 	data_assets_processed(filter: DataAssetFilter, order: DataAssetOrder, first: Int, offset: Int): [DataAsset]
 	data_assets_stored(filter: DataAssetFilter, order: DataAssetOrder, first: Int, offset: Int): [DataAsset]
@@ -74,8 +74,7 @@ type TrustBoundary {
 	id: ID!
 	name: String! @id
 	description: String! @search(by: [fulltext])
-	owner: String! @search(by: [exact])
-	justification: String! @search(by: [fulltext])
+	type: String! @search(by: [exact])
 	tech_assets(filter: TechAssetFilter, order: TechAssetOrder, first: Int, offset: Int): [TechAsset] @hasInverse(field: trust_boundary)
 	nested_trust_boundaries(filter: TrustBoundaryFilter, order: TrustBoundaryOrder, first: Int, offset: Int): [TrustBoundary] @hasInverse(field: parent_trust_boundary)
 	parent_trust_boundary(filter: TrustBoundaryFilter): TrustBoundary @hasInverse(field: nested_trust_boundaries)
@@ -502,10 +501,8 @@ type TrustBoundaryAggregateResult {
 	nameMax: String
 	descriptionMin: String
 	descriptionMax: String
-	ownerMin: String
-	ownerMax: String
-	justificationMin: String
-	justificationMax: String
+	typeMin: String
+	typeMax: String
 }
 
 type UpdateCommunicationLinkPayload {
@@ -653,8 +650,7 @@ enum TechAssetOrderable {
 enum TrustBoundaryHasFilter {
 	name
 	description
-	owner
-	justification
+	type
 	tech_assets
 	nested_trust_boundaries
 	parent_trust_boundary
@@ -663,8 +659,7 @@ enum TrustBoundaryHasFilter {
 enum TrustBoundaryOrderable {
 	name
 	description
-	owner
-	justification
+	type
 }
 
 #######################
@@ -711,15 +706,15 @@ input AddSharedRunTimeInput {
 
 input AddTechAssetInput {
 	name: String!
-	description: String!
+	description: String
 	type: String!
 	usage: String!
-	used_as_client_by_human: Boolean!
-	out_of_scope: Boolean!
+	used_as_client_by_human: Boolean
+	out_of_scope: Boolean
 	Justification_out_of_scope: String
 	size: String!
 	technology: String!
-	internet: Boolean!
+	internet: Boolean
 	machine: String!
 	encryption: String!
 	owner: String
@@ -728,9 +723,9 @@ input AddTechAssetInput {
 	availability: String!
 	justification_cia_rating: String
 	tags: [String]
-	multi_tenant: Boolean!
-	redundant: Boolean!
-	custom_developed_parts: Boolean!
+	multi_tenant: Boolean
+	redundant: Boolean
+	custom_developed_parts: Boolean
 	data_formats_accepted: [String]
 	data_assets_processed: [DataAssetRef]
 	data_assets_stored: [DataAssetRef]
@@ -742,8 +737,7 @@ input AddTechAssetInput {
 input AddTrustBoundaryInput {
 	name: String!
 	description: String!
-	owner: String!
-	justification: String!
+	type: String!
 	tech_assets: [TechAssetRef]
 	nested_trust_boundaries: [TrustBoundaryRef]
 	parent_trust_boundary: TrustBoundaryRef
@@ -992,8 +986,7 @@ input TrustBoundaryFilter {
 	id: [ID!]
 	name: StringHashFilter
 	description: StringFullTextFilter
-	owner: StringExactFilter
-	justification: StringFullTextFilter
+	type: StringExactFilter
 	has: [TrustBoundaryHasFilter]
 	and: [TrustBoundaryFilter]
 	or: [TrustBoundaryFilter]
@@ -1008,8 +1001,7 @@ input TrustBoundaryOrder {
 
 input TrustBoundaryPatch {
 	description: String
-	owner: String
-	justification: String
+	type: String
 	tech_assets: [TechAssetRef]
 	nested_trust_boundaries: [TrustBoundaryRef]
 	parent_trust_boundary: TrustBoundaryRef
@@ -1019,8 +1011,7 @@ input TrustBoundaryRef {
 	id: ID
 	name: String
 	description: String
-	owner: String
-	justification: String
+	type: String
 	tech_assets: [TechAssetRef]
 	nested_trust_boundaries: [TrustBoundaryRef]
 	parent_trust_boundary: TrustBoundaryRef

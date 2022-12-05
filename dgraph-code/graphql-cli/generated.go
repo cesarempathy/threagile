@@ -9,17 +9,17 @@ import (
 )
 
 type AddDataAssetInput struct {
-	Name                     string   `json:"name,omitempty"`
-	Description              string   `json:"description,omitempty"`
-	Usage                    string   `json:"usage,omitempty"`
-	Tags                     []string `json:"tags,omitempty"`
-	Origin                   string   `json:"origin,omitempty"`
-	Owner                    string   `json:"owner,omitempty"`
-	Quantity                 string   `json:"quantity,omitempty"`
-	Confidentiality          string   `json:"confidentiality,omitempty"`
-	Integrity                string   `json:"integrity,omitempty"`
-	Availability             string   `json:"availability,omitempty"`
-	Justification_cia_rating string   `json:"justification_cia_rating,omitempty"`
+	Name                     string   `json:"name"`
+	Description              string   `json:"description"`
+	Usage                    string   `json:"usage"`
+	Tags                     []string `json:"tags"`
+	Origin                   string   `json:"origin"`
+	Owner                    string   `json:"owner"`
+	Quantity                 string   `json:"quantity"`
+	Confidentiality          string   `json:"confidentiality"`
+	Integrity                string   `json:"integrity"`
+	Availability             string   `json:"availability"`
+	Justification_cia_rating string   `json:"justification_cia_rating"`
 }
 
 // GetName returns AddDataAssetInput.Name, and is useful for accessing the field via an interface.
@@ -56,33 +56,33 @@ func (v *AddDataAssetInput) GetAvailability() string { return v.Availability }
 func (v *AddDataAssetInput) GetJustification_cia_rating() string { return v.Justification_cia_rating }
 
 type AddTechAssetInput struct {
-	Name                       string                 `json:"name,omitempty"`
-	Description                string                 `json:"description,omitempty"`
-	Type                       string                 `json:"type,omitempty"`
-	Usage                      string                 `json:"usage,omitempty"`
-	Used_as_client_by_human    bool                   `json:"used_as_client_by_human,omitempty"`
-	Out_of_scope               bool                   `json:"out_of_scope,omitempty"`
-	Justification_out_of_scope string                 `json:"Justification_out_of_scope,omitempty"`
-	Size                       string                 `json:"size,omitempty"`
-	Technology                 string                 `json:"technology,omitempty"`
-	Internet                   bool                   `json:"internet,omitempty"`
-	Machine                    string                 `json:"machine,omitempty"`
-	Encryption                 string                 `json:"encryption,omitempty"`
-	Owner                      string                 `json:"owner,omitempty"`
-	Confidentiality            string                 `json:"confidentiality,omitempty"`
-	Integrity                  string                 `json:"integrity,omitempty"`
-	Availability               string                 `json:"availability,omitempty"`
-	Justification_cia_rating   string                 `json:"justification_cia_rating,omitempty"`
-	Tags                       []string               `json:"tags,omitempty"`
-	Multi_tenant               bool                   `json:"multi_tenant,omitempty"`
-	Redundant                  bool                   `json:"redundant,omitempty"`
-	Custom_developed_parts     bool                   `json:"custom_developed_parts,omitempty"`
-	Data_formats_accepted      []string               `json:"data_formats_accepted,omitempty"`
-	Data_assets_processed      []DataAssetRef         `json:"data_assets_processed,omitempty"`
-	Data_assets_stored         []DataAssetRef         `json:"data_assets_stored,omitempty"`
-	Communication_links        []CommunicationLinkRef `json:"communication_links,omitempty"`
-	Trust_boundary             *TrustBoundaryRef       `json:"trust_boundary,omitempty"`
-	Runtime_environment        *SharedRunTimeRef       `json:"runtime_environment,omitempty"`
+	Name                       string                 `json:"name,"`
+	Description                string                 `json:"description"`
+	Type                       string                 `json:"type"`
+	Usage                      string                 `json:"usage"`
+	Used_as_client_by_human    bool                   `json:"used_as_client_by_human"`
+	Out_of_scope               bool                   `json:"out_of_scope"`
+	Justification_out_of_scope string                 `json:"Justification_out_of_scope"`
+	Size                       string                 `json:"size"`
+	Technology                 string                 `json:"technology"`
+	Internet                   bool                   `json:"internet"`
+	Machine                    string                 `json:"machine"`
+	Encryption                 string                 `json:"encryption"`
+	Owner                      string                 `json:"owner"`
+	Confidentiality            string                 `json:"confidentiality"`
+	Integrity                  string                 `json:"integrity"`
+	Availability               string                 `json:"availability"`
+	Justification_cia_rating   string                 `json:"justification_cia_rating"`
+	Tags                       []string               `json:"tags"`
+	Multi_tenant               bool                   `json:"multi_tenant"`
+	Redundant                  bool                   `json:"redundant"`
+	Custom_developed_parts     bool                   `json:"custom_developed_parts"`
+	Data_formats_accepted      []string               `json:"data_formats_accepted"`
+	Data_assets_processed      []DataAssetRef         `json:"data_assets_processed"`
+	Data_assets_stored         []DataAssetRef         `json:"data_assets_stored"`
+	Communication_links        []CommunicationLinkRef `json:"communication_links"`
+	Trust_boundary             *TrustBoundaryRef       `json:"trust_boundary"`
+	Runtime_environment        *SharedRunTimeRef       `json:"runtime_environment"`
 }
 
 // GetName returns AddTechAssetInput.Name, and is useful for accessing the field via an interface.
@@ -283,12 +283,12 @@ func (v *DataAssetRef) GetAvailability() string { return v.Availability }
 func (v *DataAssetRef) GetJustification_cia_rating() string { return v.Justification_cia_rating }
 
 type SharedRunTimeRef struct {
-	Id            string         `json:"id,omitempty"`
-	Name          string         `json:"name,omitempty"`
-	Description   string         `json:"description,omitempty"`
-	Owner         string         `json:"owner,omitempty"`
-	Justification string         `json:"justification,omitempty"`
-	Tech_assets   []TechAssetRef `json:"tech_assets,omitempty"`
+	Id            string         `json:"id"`
+	Name          string         `json:"name"`
+	Description   string         `json:"description"`
+	Owner         string         `json:"owner"`
+	Justification string         `json:"justification"`
+	Tech_assets   []TechAssetRef `json:"tech_assets"`
 }
 
 // GetId returns SharedRunTimeRef.Id, and is useful for accessing the field via an interface.
@@ -311,31 +311,31 @@ func (v *SharedRunTimeRef) GetTech_assets() []TechAssetRef { return v.Tech_asset
 
 type TechAssetRef struct {
 	Id                         string                 `json:"id,omitempty"`
-	Name                       string                 `json:"name"`
-	Description                string                 `json:"description"`
-	Type                       string                 `json:"type"`
-	Usage                      string                 `json:"usage"`
-	Used_as_client_by_human    bool                   `json:"used_as_client_by_human"`
-	Out_of_scope               bool                   `json:"out_of_scope"`
-	Justification_out_of_scope string                 `json:"Justification_out_of_scope"`
-	Size                       string                 `json:"size"`
-	Technology                 string                 `json:"technology"`
-	Internet                   bool                   `json:"internet"`
-	Machine                    string                 `json:"machine"`
-	Encryption                 string                 `json:"encryption"`
-	Owner                      string                 `json:"owner"`
-	Confidentiality            string                 `json:"confidentiality"`
-	Integrity                  string                 `json:"integrity"`
-	Availability               string                 `json:"availability"`
-	Justification_cia_rating   string                 `json:"justification_cia_rating"`
-	Tags                       []string               `json:"tags"`
-	Multi_tenant               bool                   `json:"multi_tenant"`
-	Redundant                  bool                   `json:"redundant"`
-	Custom_developed_parts     bool                   `json:"custom_developed_parts"`
-	Data_formats_accepted      []string               `json:"data_formats_accepted"`
-	Data_assets_processed      []DataAssetRef         `json:"data_assets_processed"`
-	Data_assets_stored         []DataAssetRef         `json:"data_assets_stored"`
-	Communication_links        []CommunicationLinkRef `json:"communication_links"`
+	Name                       string                 `json:"name,omitempty"`
+	Description                string                 `json:"description,omitempty"`
+	Type                       string                 `json:"type,omitempty"`
+	Usage                      string                 `json:"usage,omitempty"`
+	Used_as_client_by_human    bool                   `json:"used_as_client_by_human,omitempty"`
+	Out_of_scope               bool                   `json:"out_of_scope,omitempty"`
+	Justification_out_of_scope string                 `json:"Justification_out_of_scope,omitempty"`
+	Size                       string                 `json:"size,omitempty"`
+	Technology                 string                 `json:"technology,omitempty"`
+	Internet                   bool                   `json:"internet,omitempty"`
+	Machine                    string                 `json:"machine,omitempty"`
+	Encryption                 string                 `json:"encryption,omitempty"`
+	Owner                      string                 `json:"owner,omitempty"`
+	Confidentiality            string                 `json:"confidentiality,omitempty"`
+	Integrity                  string                 `json:"integrity,omitempty"`
+	Availability               string                 `json:"availability,omitempty"`
+	Justification_cia_rating   string                 `json:"justification_cia_rating,omitempty"`
+	Tags                       []string               `json:"tags,omitempty"`
+	Multi_tenant               bool                   `json:"multi_tenant,omitempty"`
+	Redundant                  bool                   `json:"redundant,omitempty"`
+	Custom_developed_parts     bool                   `json:"custom_developed_parts,omitempty"`
+	Data_formats_accepted      []string               `json:"data_formats_accepted,omitempty"`
+	Data_assets_processed      []DataAssetRef         `json:"data_assets_processed,omitempty"`
+	Data_assets_stored         []DataAssetRef         `json:"data_assets_stored,omitempty"`
+	Communication_links        []CommunicationLinkRef `json:"communication_links,omitempty"`
 	Trust_boundary             *TrustBoundaryRef       `json:"trust_boundary,omitempty"`
 	Runtime_environment        *SharedRunTimeRef       `json:"runtime_environment,omitempty"`
 }
@@ -428,8 +428,7 @@ type TrustBoundaryRef struct {
 	Id                      string             `json:"id,omitempty"`
 	Name                    string             `json:"name,omitempty"`
 	Description             string             `json:"description,omitempty"`
-	Owner                   string             `json:"owner,omitempty"`
-	Justification           string             `json:"justification,omitempty"`
+	Type                    string             `json:"type,omitempty"`
 	Tech_assets             []TechAssetRef     `json:"tech_assets,omitempty"`
 	Nested_trust_boundaries []TrustBoundaryRef `json:"nested_trust_boundaries,omitempty"`
 	Parent_trust_boundary   *TrustBoundaryRef   `json:"parent_trust_boundary,omitempty"`
@@ -444,11 +443,8 @@ func (v *TrustBoundaryRef) GetName() string { return v.Name }
 // GetDescription returns TrustBoundaryRef.Description, and is useful for accessing the field via an interface.
 func (v *TrustBoundaryRef) GetDescription() string { return v.Description }
 
-// GetOwner returns TrustBoundaryRef.Owner, and is useful for accessing the field via an interface.
-func (v *TrustBoundaryRef) GetOwner() string { return v.Owner }
-
-// GetJustification returns TrustBoundaryRef.Justification, and is useful for accessing the field via an interface.
-func (v *TrustBoundaryRef) GetJustification() string { return v.Justification }
+// GetType returns TrustBoundaryRef.Type, and is useful for accessing the field via an interface.
+func (v *TrustBoundaryRef) GetType() string { return v.Type }
 
 // GetTech_assets returns TrustBoundaryRef.Tech_assets, and is useful for accessing the field via an interface.
 func (v *TrustBoundaryRef) GetTech_assets() []TechAssetRef { return v.Tech_assets }
@@ -465,7 +461,7 @@ func (v *TrustBoundaryRef) GetParent_trust_boundary() *TrustBoundaryRef {
 
 // __createDataAssetInput is used internally by genqlient
 type __createDataAssetInput struct {
-	Input []AddDataAssetInput `json:"input,omitempty"`
+	Input []AddDataAssetInput `json:"input"`
 }
 
 // GetInput returns __createDataAssetInput.Input, and is useful for accessing the field via an interface.
@@ -473,7 +469,7 @@ func (v *__createDataAssetInput) GetInput() []AddDataAssetInput { return v.Input
 
 // __createTechAssetInput is used internally by genqlient
 type __createTechAssetInput struct {
-	Input []AddTechAssetInput `json:"input,omitempty"`
+	Input []AddTechAssetInput `json:"input"`
 }
 
 // GetInput returns __createTechAssetInput.Input, and is useful for accessing the field via an interface.
@@ -481,7 +477,7 @@ func (v *__createTechAssetInput) GetInput() []AddTechAssetInput { return v.Input
 
 // __getDataAssetInput is used internally by genqlient
 type __getDataAssetInput struct {
-	Id string `json:"id,omitempty"`
+	Id string `json:"id"`
 }
 
 // GetId returns __getDataAssetInput.Id, and is useful for accessing the field via an interface.
@@ -489,7 +485,7 @@ func (v *__getDataAssetInput) GetId() string { return v.Id }
 
 // __getTechAssetInput is used internally by genqlient
 type __getTechAssetInput struct {
-	Id string `json:"id,omitempty"`
+	Id string `json:"id"`
 }
 
 // GetId returns __getTechAssetInput.Id, and is useful for accessing the field via an interface.
@@ -497,7 +493,7 @@ func (v *__getTechAssetInput) GetId() string { return v.Id }
 
 // createDataAssetAddDataAssetAddDataAssetPayload includes the requested fields of the GraphQL type AddDataAssetPayload.
 type createDataAssetAddDataAssetAddDataAssetPayload struct {
-	NumUids int `json:"numUids,omitempty"`
+	NumUids int `json:"numUids"`
 }
 
 // GetNumUids returns createDataAssetAddDataAssetAddDataAssetPayload.NumUids, and is useful for accessing the field via an interface.
@@ -505,7 +501,7 @@ func (v *createDataAssetAddDataAssetAddDataAssetPayload) GetNumUids() int { retu
 
 // createDataAssetResponse is returned by createDataAsset on success.
 type createDataAssetResponse struct {
-	AddDataAsset createDataAssetAddDataAssetAddDataAssetPayload `json:"addDataAsset,omitempty"`
+	AddDataAsset createDataAssetAddDataAssetAddDataAssetPayload `json:"addDataAsset"`
 }
 
 // GetAddDataAsset returns createDataAssetResponse.AddDataAsset, and is useful for accessing the field via an interface.
@@ -515,7 +511,7 @@ func (v *createDataAssetResponse) GetAddDataAsset() createDataAssetAddDataAssetA
 
 // createTechAssetAddTechAssetAddTechAssetPayload includes the requested fields of the GraphQL type AddTechAssetPayload.
 type createTechAssetAddTechAssetAddTechAssetPayload struct {
-	NumUids int `json:"numUids,omitempty"`
+	NumUids int `json:"numUids"`
 }
 
 // GetNumUids returns createTechAssetAddTechAssetAddTechAssetPayload.NumUids, and is useful for accessing the field via an interface.
@@ -523,7 +519,7 @@ func (v *createTechAssetAddTechAssetAddTechAssetPayload) GetNumUids() int { retu
 
 // createTechAssetResponse is returned by createTechAsset on success.
 type createTechAssetResponse struct {
-	AddTechAsset createTechAssetAddTechAssetAddTechAssetPayload `json:"addTechAsset,omitempty"`
+	AddTechAsset createTechAssetAddTechAssetAddTechAssetPayload `json:"addTechAsset"`
 }
 
 // GetAddTechAsset returns createTechAssetResponse.AddTechAsset, and is useful for accessing the field via an interface.
@@ -533,8 +529,8 @@ func (v *createTechAssetResponse) GetAddTechAsset() createTechAssetAddTechAssetA
 
 // getDataAssetGetDataAsset includes the requested fields of the GraphQL type DataAsset.
 type getDataAssetGetDataAsset struct {
-	Id          string `json:"id,omitempty"`
-	Description string `json:"description,omitempty"`
+	Id          string `json:"id"`
+	Description string `json:"description"`
 }
 
 // GetId returns getDataAssetGetDataAsset.Id, and is useful for accessing the field via an interface.
@@ -545,7 +541,7 @@ func (v *getDataAssetGetDataAsset) GetDescription() string { return v.Descriptio
 
 // getDataAssetResponse is returned by getDataAsset on success.
 type getDataAssetResponse struct {
-	GetDataAsset getDataAssetGetDataAsset `json:"getDataAsset,omitempty"`
+	GetDataAsset getDataAssetGetDataAsset `json:"getDataAsset"`
 }
 
 // GetGetDataAsset returns getDataAssetResponse.GetDataAsset, and is useful for accessing the field via an interface.
@@ -553,8 +549,8 @@ func (v *getDataAssetResponse) GetGetDataAsset() getDataAssetGetDataAsset { retu
 
 // getTechAssetGetTechAsset includes the requested fields of the GraphQL type TechAsset.
 type getTechAssetGetTechAsset struct {
-	Id          string `json:"id,omitempty"`
-	Description string `json:"description,omitempty"`
+	Id          string `json:"id"`
+	Description string `json:"description"`
 }
 
 // GetId returns getTechAssetGetTechAsset.Id, and is useful for accessing the field via an interface.
@@ -565,7 +561,7 @@ func (v *getTechAssetGetTechAsset) GetDescription() string { return v.Descriptio
 
 // getTechAssetResponse is returned by getTechAsset on success.
 type getTechAssetResponse struct {
-	GetTechAsset getTechAssetGetTechAsset `json:"getTechAsset,omitempty"`
+	GetTechAsset getTechAssetGetTechAsset `json:"getTechAsset"`
 }
 
 // GetGetTechAsset returns getTechAssetResponse.GetTechAsset, and is useful for accessing the field via an interface.

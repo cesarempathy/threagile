@@ -27,6 +27,8 @@ func UploadTechAssets(model model.ModelInput, client *graphql.Client) map[string
 		reqTechAssets.Var("input", techAsset)
 		reqTechAssets.Header.Set("Cache-Control", "no-cache")
 		var respTechAsset interface{}
+		// bla, _ := json.Marshal(techAsset)
+		// fmt.Println(string(bla))
 		if err := client.Run(ctx, reqTechAssets, &respTechAsset); err != nil {
 			log.Fatal(err)
 		}
@@ -40,37 +42,7 @@ func mapTechAssetToModelInput(model model.ModelInput) map[string]AddTechAssetInp
 	var techAssetInput map[string]AddTechAssetInput = make(map[string]AddTechAssetInput)
 	// var connectionsMap = make(map[string][]string)
 	for key, techAsset := range model.Technical_assets {
-		var links []CommunicationLinkRef
-		for _, comm_link := range techAsset.Communication_links {
-			var dataAssetsSend []DataAssetRef = make([]DataAssetRef, 0)
 
-			for _, data := range comm_link.Data_assets_sent {
-				dataAssetsSend = append(dataAssetsSend, DataAssetRef{
-					Name: data,
-				})
-			}
-			var dataAssetsReceive []DataAssetRef = make([]DataAssetRef, 0)
-			for _, data := range comm_link.Data_assets_received {
-				dataAssetsReceive = append(dataAssetsReceive, DataAssetRef{
-					Name: data,
-				})
-			}
-
-			links = append(links, CommunicationLinkRef{
-				Description:          comm_link.Description,
-				Protocol:             comm_link.Protocol,
-				Authentication:       comm_link.Authentication,
-				Authorization:        comm_link.Authorization,
-				Tags:                 comm_link.Tags,
-				Vpn:                  comm_link.VPN,
-				Ip_filtered:          comm_link.IP_filtered,
-				Readonly:             comm_link.Readonly,
-				Usage:                comm_link.Usage,
-				Data_assets_sent:     dataAssetsSend,
-				Data_assets_received: dataAssetsReceive,
-				Tech_asset_to:        &TechAssetRef{Name: comm_link.Target},
-			})
-		}
 		var dataAssetsProcessed []DataAssetRef = make([]DataAssetRef, 0)
 		for _, data := range techAsset.Data_assets_processed {
 			dataAssetsProcessed = append(dataAssetsProcessed, DataAssetRef{
@@ -107,11 +79,10 @@ func mapTechAssetToModelInput(model model.ModelInput) map[string]AddTechAssetInp
 			Redundant:                  techAsset.Redundant,
 			Custom_developed_parts:     techAsset.Custom_developed_parts,
 			Data_formats_accepted:      techAsset.Data_formats_accepted,
-			Communication_links:        links,
 			Data_assets_processed:      dataAssetsProcessed,
 			Data_assets_stored:         dataAssetsStored,
-			// Trust_boundary:             nil,
-			// Runtime_environment:        nil,
+			Trust_boundary:             nil,
+			Runtime_environment:        nil,
 		}
 
 	}
