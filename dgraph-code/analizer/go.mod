@@ -1,6 +1,6 @@
 module analizer
 
-go 1.19
+go 1.18
 
 require (
 	cdr.dev/slog v1.4.2-0.20220126003130-b94a5ff54f37 // indirect

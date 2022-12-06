@@ -2,20 +2,20 @@ type TechAsset  {
 	id: ID! 
 	name: String! @id
 	description: String @search(by:[fulltext]) 
-	type: String! @search(by:[exact]) 
-	usage: String! @search(by:[fulltext]) 
+	type: String @search(by:[exact]) 
+	usage: String @search(by:[fulltext]) 
 	used_as_client_by_human: Boolean @search 
 	out_of_scope: Boolean @search 
 	Justification_out_of_scope: String @search(by:[fulltext]) 
-	size: String! @search(by:[exact]) 
-	technology: String! @search(by:[exact]) 
+	size: String @search(by:[exact]) 
+	technology: String @search(by:[exact]) 
 	internet: Boolean @search 
-	machine: String! @search(by:[exact]) 
-	encryption: String! @search(by:[exact]) 
+	machine: String @search(by:[exact]) 
+	encryption: String @search(by:[exact]) 
 	owner: String @search(by:[exact]) 
-	confidentiality: String! @search(by:[exact]) 
-	integrity: String! @search(by:[exact]) 
-	availability: String! @search(by:[exact]) 
+	confidentiality: String @search(by:[exact]) 
+	integrity: String @search(by:[exact]) 
+	availability: String @search(by:[exact]) 
 	justification_cia_rating: String @search(by:[fulltext]) 
 	tags: [String] @search(by:[exact]) 
 	multi_tenant: Boolean @search 

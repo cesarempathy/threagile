@@ -1,72 +1,134 @@
 vpcnetwork: {
-  k8s-network
+  k8s-network: {
+    icon: https://img.icons8.com/color/512/kubernetes.png
+    audit-service-mongo-db.icon: https://img.icons8.com/color/512/mongodb.png
+    config-service-mongo-db.icon: https://img.icons8.com/color/512/mongodb.png
+    index-mongo-db.icon: https://img.icons8.com/color/512/mongodb.png
+    play-mongo-db.icon: https://img.icons8.com/color/512/mongodb.png
+    search-mongodb.icon: https://img.icons8.com/color/512/mongodb.png
+    elasticsearch.icon: https://img.icons8.com/color/512/elasticsearch.png
+    tagging-playboard-mongo-db.icon: https://img.icons8.com/color/512/mongodb.png
+  }
+  mongodb-analytics.icon: https://img.icons8.com/color/512/mongodb.png
 }
 devops-network: {
   devops-publish-network
   devops-build-network
 }
-github
-vpcnetwork.k8s-network.audit-service -> vpcnetwork.k8s-network.audit-mongo-db: nosql-access-protocol {style.stroke: green}
-vpcnetwork.k8s-network.audit-service -> vpcnetwork.k8s-network.play-service: http {style.stroke: green}
-vpcnetwork.k8s-network.audit-service -> vpcnetwork.k8s-network.prometheus: http {style.stroke: green}
-vpcnetwork.k8s-network.play-service -> vpcnetwork.k8s-network.prometheus: http {style.stroke: green}
-vpcnetwork.k8s-network.play-service -> vpcnetwork.k8s-network.audit-service: http {style.stroke: green}
-vpcnetwork.k8s-network.play-service -> vpcnetwork.k8s-network.prometheus: http {style.stroke: green}
-vpcnetwork.k8s-network.config-service-data -> vpcnetwork.k8s-network.prometheus: http {style.stroke: green}
-vpcnetwork.k8s-network.config-service-data -> vpcnetwork.k8s-network.audit-service: http {style.stroke: green}
-vpcnetwork.k8s-network.audit-mongo-db -> vpcnetwork.k8s-network.prometheus: http {style.stroke: green}
-devops-network.devops-publish-network.harbor-container-registry -> vpcnetwork.k8s-network.docker-container-registry: https {style.stroke: green}
-devops-network.devops-publish-network.harbor-container-registry -> vpcnetwork.k8s-network.docker-container-registry: https {style.stroke: green}
-github.git-sourcecode-repository-workloads -> vpcnetwork.k8s-network.argocd-service: https {style.stroke: green}
-github.git-sourcecode-repository-workloads -> vpcnetwork.k8s-network.argocd-service: https {style.stroke: green}
-github.git-sourcecode-repository-workloads -> vpcnetwork.k8s-network.argocd-service: https {style.stroke: green}
-devops-network.devops-build-network.jenkins-build-pipeline -> devops-network.devops-build-network.sonarqube-code-inspection-platform: https {style.stroke: green}
-devops-network.devops-build-network.jenkins-build-pipeline -> devops-network.devops-publish-network.harbor-container-registry: https {style.stroke: green}
-devops-network.devops-build-network.jenkins-build-pipeline -> devops-network.devops-build-network.git-sourcecode-repository: https {style.stroke: green}
-devops-network.devops-build-network.jenkins-build-pipeline -> devops-network.devops-publish-network.helm-template-manifest: https {style.stroke: green}
-devops-network.devops-build-network.jenkins-build-pipeline -> devops-network.devops-build-network.nexus-artifact-registry: https {style.stroke: green}
-devops-network.devops-build-network.jenkins-build-pipeline -> devops-network.devops-build-network.git-sourcecode-repository: https {style.stroke: green}
-devops-network.devops-build-network.jenkins-build-pipeline -> devops-network.devops-publish-network.helm-template-manifest: https {style.stroke: green}
-devops-network.devops-build-network.jenkins-build-pipeline -> devops-network.devops-build-network.nexus-artifact-registry: https {style.stroke: green}
-devops-network.devops-build-network.jenkins-build-pipeline -> devops-network.devops-build-network.sonarqube-code-inspection-platform: https {style.stroke: green}
-devops-network.devops-build-network.jenkins-build-pipeline -> devops-network.devops-publish-network.harbor-container-registry: https {style.stroke: green}
-development-client -> devops-network.devops-build-network.jenkins-build-pipeline: https {style.stroke: green}
-development-client -> devops-network.devops-publish-network.harbor-container-registry: https {style.stroke: green}
-development-client -> devops-network.devops-build-network.nexus-artifact-registry: https {style.stroke: green}
-development-client -> devops-network.devops-build-network.sonarqube-code-inspection-platform: https {style.stroke: green}
-development-client -> devops-network.devops-build-network.git-sourcecode-repository: https {style.stroke: green}
-development-client -> github.git-sourcecode-repository-workloads: https {style.stroke: green}
-development-client -> devops-network.devops-build-network.nexus-artifact-registry: https {style.stroke: green}
-development-client -> devops-network.devops-build-network.sonarqube-code-inspection-platform: https {style.stroke: green}
-development-client -> devops-network.devops-build-network.git-sourcecode-repository: https {style.stroke: green}
-development-client -> devops-network.devops-build-network.jenkins-build-pipeline: https {style.stroke: green}
-development-client -> devops-network.devops-publish-network.harbor-container-registry: https {style.stroke: green}
-development-client -> github.git-sourcecode-repository-workloads: https {style.stroke: green}
-development-client -> devops-network.devops-build-network.git-sourcecode-repository: https {style.stroke: green}
-development-client -> vpcnetwork.argo-workflows-service: https {style.stroke: green}
-development-client -> github.git-sourcecode-repository-workloads: https {style.stroke: green}
-vpcnetwork.k8s-network.contextualize-service -> vpcnetwork.k8s-network.prometheus: http {style.stroke: green}
-vpcnetwork.k8s-network.contextualize-service -> vpcnetwork.k8s-network.qeury-processor: http {style.stroke: green}
-vpcnetwork.k8s-network.argocd-service -> vpcnetwork.k8s-network.kubernetes-container-platform: https {style.stroke: green}
-vpcnetwork.k8s-network.argocd-service -> vpcnetwork.k8s-network.kubernetes-container-platform: https {style.stroke: green}
-vpcnetwork.k8s-network.argocd-service -> devops-network.devops-build-network.git-sourcecode-repository: https {style.stroke: green}
-vpcnetwork.k8s-network.argocd-service -> vpcnetwork.k8s-network.kubernetes-container-platform: https {style.stroke: green}
-vpcnetwork.k8s-network.argocd-service -> vpcnetwork.k8s-network.kubernetes-container-platform: https {style.stroke: green}
-vpcnetwork.alb -> vpcnetwork.k8s-network.ingress: http {style.stroke: green}
-vpcnetwork.alb -> vpcnetwork.k8s-network.ingress: http {style.stroke: green}
-vpcnetwork.alb -> vpcnetwork.k8s-network.ingress: http {style.stroke: green}
-vpcnetwork.alb -> vpcnetwork.k8s-network.ingress: http {style.stroke: green}
-vpcnetwork.k8s-network.kubernetes-container-platform -> vpcnetwork.k8s-network.docker-container-registry: https {style.stroke: green}
-vpcnetwork.k8s-network.kubernetes-container-platform -> vpcnetwork.k8s-network.docker-container-registry: https {style.stroke: green}
-vpcnetwork.k8s-network.kubernetes-container-platform -> vpcnetwork.k8s-network.logging-service: https {style.stroke: green}
-vpcnetwork.k8s-network.kubernetes-container-platform -> vpcnetwork.spark-operator: https {style.stroke: green}
-devops-network.devops-publish-network.helm-template-manifest -> vpcnetwork.k8s-network.kubernetes-container-platform: https {style.stroke: green}
-devops-network.devops-publish-network.helm-template-manifest -> vpcnetwork.k8s-network.kubernetes-container-platform: https {style.stroke: green}
+github: {
+  git-sourcecode-repository.icon: https://img.icons8.com/color/512/github.png
+  git-sourcecode-repository-workloads.icon: https://img.icons8.com/color/512/github.png
+}
+vpcnetwork.k8s-network.ingress -> vpcnetwork.k8s-network.audit-service: http {style.stroke: green}
+vpcnetwork.k8s-network.ingress -> vpcnetwork.k8s-network.beacon-service: http {style.stroke: green}
 vpcnetwork.k8s-network.ingress -> vpcnetwork.k8s-network.contextualize-service: http {style.stroke: green}
+vpcnetwork.k8s-network.ingress -> vpcnetwork.k8s-network.data-config-service: http {style.stroke: green}
 vpcnetwork.k8s-network.ingress -> vpcnetwork.k8s-network.user-service: http {style.stroke: green}
 vpcnetwork.k8s-network.ingress -> vpcnetwork.k8s-network.statistic-service: http {style.stroke: green}
-vpcnetwork.k8s-network.ingress -> vpcnetwork.k8s-network.search-service: http {style.stroke: green}
+vpcnetwork.k8s-network.ingress -> vpcnetwork.k8s-network.tagging-enrichment-service: http {style.stroke: green}
+vpcnetwork.k8s-network.ingress -> vpcnetwork.k8s-network.tagging-playboard-service: http {style.stroke: green}
 vpcnetwork.k8s-network.ingress -> vpcnetwork.k8s-network.tagging-service: http {style.stroke: green}
+vpcnetwork.k8s-network.ingress -> vpcnetwork.k8s-network.tagging-service: http {style.stroke: green}
+vpcnetwork.k8s-network.ingress -> vpcnetwork.k8s-network.search-service: http {style.stroke: green}
+vpcnetwork.alb -> vpcnetwork.k8s-network.ingress: http {style.stroke: green}
+vpcnetwork.alb -> vpcnetwork.k8s-network.ingress: http {style.stroke: green}
+vpcnetwork.alb -> vpcnetwork.k8s-network.ingress: http {style.stroke: green}
+vpcnetwork.alb -> vpcnetwork.k8s-network.ingress: http {style.stroke: green}
+vpcnetwork.alb -> vpcnetwork.k8s-network.ingress: http {style.stroke: green}
+vpcnetwork.alb -> vpcnetwork.k8s-network.ingress: http {style.stroke: green}
+vpcnetwork.alb -> vpcnetwork.k8s-network.ingress: http {style.stroke: green}
+vpcnetwork.alb -> vpcnetwork.k8s-network.ingress: http {style.stroke: green}
+vpcnetwork.alb -> vpcnetwork.k8s-network.ingress: http {style.stroke: green}
+vpcnetwork.alb -> vpcnetwork.k8s-network.ingress: http {style.stroke: green}
+vpcnetwork.k8s-network.audit-service -> vpcnetwork.k8s-network.audit-service-mongo-db: nosql-access-protocol {style.stroke: green}
+vpcnetwork.k8s-network.audit-service-mongo-db -> vpcnetwork.k8s-network.prometheus: http {style.stroke: green}
+vpcnetwork.k8s-network.argocd-service -> vpcnetwork.k8s-network.kubernetes-container-platform: https {style.stroke: green}
+vpcnetwork.k8s-network.argocd-service -> vpcnetwork.k8s-network.kubernetes-container-platform: https {style.stroke: green}
+vpcnetwork.k8s-network.argocd-service -> vpcnetwork.k8s-network.kubernetes-container-platform: https {style.stroke: green}
+vpcnetwork.k8s-network.argocd-service -> vpcnetwork.k8s-network.kubernetes-container-platform: https {style.stroke: green}
+vpcnetwork.k8s-network.argocd-service -> vpcnetwork.k8s-network.kubernetes-container-platform: https {style.stroke: green}
+vpcnetwork.k8s-network.argocd-service -> vpcnetwork.k8s-network.kubernetes-container-platform: https {style.stroke: green}
+vpcnetwork.k8s-network.argocd-service -> vpcnetwork.k8s-network.kubernetes-container-platform: https {style.stroke: green}
+vpcnetwork.k8s-network.argocd-service -> vpcnetwork.k8s-network.kubernetes-container-platform: https {style.stroke: green}
+vpcnetwork.k8s-network.argocd-service -> vpcnetwork.k8s-network.kubernetes-container-platform: https {style.stroke: green}
+vpcnetwork.k8s-network.qeury-processor -> vpcnetwork.k8s-network.prometheus: http {style.stroke: green}
+vpcnetwork.k8s-network.qeury-processor -> vpcnetwork.k8s-network.data-config-service: http {style.stroke: green}
+devops-network.devops-publish-network.harbor-container-registry -> vpcnetwork.docker-container-registry: https {style.stroke: green}
+devops-network.devops-publish-network.harbor-container-registry -> vpcnetwork.docker-container-registry: https {style.stroke: green}
+devops-network.devops-publish-network.harbor-container-registry -> vpcnetwork.docker-container-registry: https {style.stroke: green}
+development-client -> devops-network.devops-build-network.nexus-artifact-registry: https {style.stroke: green}
+development-client -> devops-network.devops-build-network.sonarqube-code-inspection-platform: https {style.stroke: green}
+development-client -> github.git-sourcecode-repository: https {style.stroke: green}
+development-client -> github.git-sourcecode-repository-workloads: https {style.stroke: green}
+development-client -> devops-network.devops-build-network.jenkins-build-pipeline: https {style.stroke: green}
+development-client -> devops-network.devops-publish-network.harbor-container-registry: https {style.stroke: green}
+development-client -> devops-network.devops-build-network.nexus-artifact-registry: https {style.stroke: green}
+development-client -> devops-network.devops-build-network.sonarqube-code-inspection-platform: https {style.stroke: green}
+development-client -> github.git-sourcecode-repository: https {style.stroke: green}
+development-client -> github.git-sourcecode-repository-workloads: https {style.stroke: green}
+development-client -> devops-network.devops-build-network.jenkins-build-pipeline: https {style.stroke: green}
+development-client -> devops-network.devops-publish-network.harbor-container-registry: https {style.stroke: green}
+development-client -> devops-network.devops-build-network.nexus-artifact-registry: https {style.stroke: green}
+development-client -> devops-network.devops-build-network.sonarqube-code-inspection-platform: https {style.stroke: green}
+development-client -> github.git-sourcecode-repository: https {style.stroke: green}
+development-client -> devops-network.devops-build-network.jenkins-build-pipeline: https {style.stroke: green}
+development-client -> devops-network.devops-publish-network.harbor-container-registry: https {style.stroke: green}
+development-client -> github.git-sourcecode-repository-workloads: https {style.stroke: green}
+development-client -> github.git-sourcecode-repository-workloads: https {style.stroke: green}
+development-client -> github.git-sourcecode-repository-workloads: https {style.stroke: green}
+development-client -> github.git-sourcecode-repository-workloads: https {style.stroke: green}
+development-client -> github.git-sourcecode-repository-workloads: https {style.stroke: green}
+development-client -> github.git-sourcecode-repository-workloads: https {style.stroke: green}
+development-client -> github.git-sourcecode-repository-workloads: https {style.stroke: green}
+devops-network.devops-build-network.jenkins-build-pipeline -> devops-network.devops-publish-network.harbor-container-registry: https {style.stroke: green}
+devops-network.devops-build-network.jenkins-build-pipeline -> github.git-sourcecode-repository: https {style.stroke: green}
+devops-network.devops-build-network.jenkins-build-pipeline -> devops-network.devops-publish-network.helm-template-manifest: https {style.stroke: green}
+devops-network.devops-build-network.jenkins-build-pipeline -> devops-network.devops-build-network.nexus-artifact-registry: https {style.stroke: green}
+devops-network.devops-build-network.jenkins-build-pipeline -> devops-network.devops-build-network.sonarqube-code-inspection-platform: https {style.stroke: green}
+devops-network.devops-build-network.jenkins-build-pipeline -> devops-network.devops-build-network.nexus-artifact-registry: https {style.stroke: green}
+devops-network.devops-build-network.jenkins-build-pipeline -> devops-network.devops-build-network.sonarqube-code-inspection-platform: https {style.stroke: green}
+devops-network.devops-build-network.jenkins-build-pipeline -> devops-network.devops-publish-network.harbor-container-registry: https {style.stroke: green}
+devops-network.devops-build-network.jenkins-build-pipeline -> github.git-sourcecode-repository: https {style.stroke: green}
+devops-network.devops-build-network.jenkins-build-pipeline -> devops-network.devops-publish-network.helm-template-manifest: https {style.stroke: green}
+devops-network.devops-build-network.jenkins-build-pipeline -> devops-network.devops-build-network.nexus-artifact-registry: https {style.stroke: green}
+devops-network.devops-build-network.jenkins-build-pipeline -> devops-network.devops-build-network.sonarqube-code-inspection-platform: https {style.stroke: green}
+devops-network.devops-build-network.jenkins-build-pipeline -> devops-network.devops-publish-network.harbor-container-registry: https {style.stroke: green}
+devops-network.devops-build-network.jenkins-build-pipeline -> github.git-sourcecode-repository: https {style.stroke: green}
+devops-network.devops-build-network.jenkins-build-pipeline -> devops-network.devops-publish-network.helm-template-manifest: https {style.stroke: green}
+devops-network.devops-publish-network.helm-template-manifest -> vpcnetwork.k8s-network.kubernetes-container-platform: https {style.stroke: green}
+devops-network.devops-publish-network.helm-template-manifest -> vpcnetwork.k8s-network.kubernetes-container-platform: https {style.stroke: green}
+devops-network.devops-publish-network.helm-template-manifest -> vpcnetwork.k8s-network.kubernetes-container-platform: https {style.stroke: green}
+vpcnetwork.k8s-network.beacon-service -> vpcnetwork.k8s-network.qeury-processor: http {style.stroke: green}
+vpcnetwork.k8s-network.beacon-service -> vpcnetwork.k8s-network.prometheus: http {style.stroke: green}
+github.git-sourcecode-repository-workloads -> vpcnetwork.k8s-network.argocd-service: https {style.stroke: green}
+github.git-sourcecode-repository-workloads -> vpcnetwork.k8s-network.argocd-service: https {style.stroke: green}
+github.git-sourcecode-repository-workloads -> vpcnetwork.k8s-network.argocd-service: https {style.stroke: green}
+github.git-sourcecode-repository-workloads -> vpcnetwork.k8s-network.argocd-service: https {style.stroke: green}
+github.git-sourcecode-repository-workloads -> vpcnetwork.k8s-network.argocd-service: https {style.stroke: green}
+github.git-sourcecode-repository-workloads -> vpcnetwork.k8s-network.argocd-service: https {style.stroke: green}
+github.git-sourcecode-repository-workloads -> vpcnetwork.k8s-network.argocd-service: https {style.stroke: green}
+github.git-sourcecode-repository-workloads -> vpcnetwork.k8s-network.argocd-service: https {style.stroke: green}
+github.git-sourcecode-repository-workloads -> vpcnetwork.k8s-network.argocd-service: https {style.stroke: green}
+vpcnetwork.k8s-network.kubernetes-container-platform -> vault: http {style.stroke: green}
+vpcnetwork.k8s-network.kubernetes-container-platform -> vpcnetwork.docker-container-registry: https {style.stroke: green}
+vpcnetwork.k8s-network.kubernetes-container-platform -> vault: http {style.stroke: green}
+vpcnetwork.k8s-network.kubernetes-container-platform -> vpcnetwork.docker-container-registry: https {style.stroke: green}
+vpcnetwork.k8s-network.kubernetes-container-platform -> vault: http {style.stroke: green}
+vpcnetwork.k8s-network.kubernetes-container-platform -> vpcnetwork.docker-container-registry: https {style.stroke: green}
+vpcnetwork.k8s-network.contextualize-service -> vpcnetwork.k8s-network.prometheus: http {style.stroke: green}
+vpcnetwork.k8s-network.contextualize-service -> vpcnetwork.k8s-network.qeury-processor: http {style.stroke: green}
+vpcnetwork.k8s-network.data-config-service -> vpcnetwork.k8s-network.prometheus: http {style.stroke: green}
+vpcnetwork.k8s-network.data-config-service -> vpcnetwork.k8s-network.config-service-mongo-db: nosql-access-protocol {style.stroke: green}
+vpcnetwork.k8s-network.data-config-service -> vpcnetwork.k8s-network.audit-service: http {style.stroke: green}
+vpcnetwork.k8s-network.config-service-mongo-db -> vpcnetwork.k8s-network.prometheus: http {style.stroke: green}
+vpcnetwork.k8s-network.ebadmin -> vpcnetwork.k8s-network.prometheus: http {style.stroke: green}
+vpcnetwork.k8s-network.ebadmin -> vpcnetwork.k8s-network.zoo-keeper: nosql-access-protocol {style.stroke: green}
+devops-network.devops-publish-network.github-action-pipeline -> github.git-sourcecode-repository: https {style.stroke: green}
+devops-network.devops-publish-network.github-action-pipeline -> s3-statics-ta: https {style.stroke: green}
+devops-network.devops-publish-network.github-action-pipeline -> github.git-sourcecode-repository: https {style.stroke: green}
+devops-network.devops-publish-network.github-action-pipeline -> npm-registry: https {style.stroke: green}
+vpcnetwork.k8s-network.index-builder -> vpcnetwork.k8s-network.prometheus: http {style.stroke: green}
+vpcnetwork.k8s-network.index-builder -> vpcnetwork.k8s-network.index-mongo-db: nosql-access-protocol {style.stroke: green}
 vpcnetwork.k8s-network.index-mongo-db -> vpcnetwork.k8s-network.prometheus: http {style.stroke: green}
 data-feeds-bucket -> vpcnetwork.k8s-network.prometheus: http {style.stroke: green}
 tooling-feeds-queue -> vpcnetwork.k8s-network.prometheus: http {style.stroke: green}
@@ -78,34 +140,46 @@ vpcnetwork.k8s-network.index-builder-worker -> vpcnetwork.k8s-network.index-cooo
 vpcnetwork.k8s-network.index-cooordinator -> vpcnetwork.k8s-network.index-mongo-db: nosql-access-protocol {style.stroke: green}
 vpcnetwork.k8s-network.index-cooordinator -> vpcnetwork.k8s-network.prometheus: http {style.stroke: green}
 transformed-feeds-bucket -> vpcnetwork.k8s-network.prometheus: http {style.stroke: green}
-vpcnetwork.k8s-network.index-builder -> vpcnetwork.k8s-network.prometheus: http {style.stroke: green}
-vpcnetwork.k8s-network.index-builder -> vpcnetwork.k8s-network.index-mongo-db: nosql-access-protocol {style.stroke: green}
+vpcnetwork.k8s-network.play-service -> vpcnetwork.k8s-network.prometheus: http {style.stroke: green}
+vpcnetwork.k8s-network.play-mongo-db -> vpcnetwork.k8s-network.prometheus: http {style.stroke: green}
 vpcnetwork.k8s-network.user-service -> vpcnetwork.k8s-network.prometheus: http {style.stroke: green}
 vpcnetwork.k8s-network.user-service -> vpcnetwork.k8s-network.play-mongo-db: nosql-access-protocol {style.stroke: green}
-vpcnetwork.k8s-network.play-mongo-db -> vpcnetwork.k8s-network.prometheus: http {style.stroke: green}
-redis -> vpcnetwork.k8s-network.prometheus: http {style.stroke: green}
-vpcnetwork.k8s-network.search-mongodb -> vpcnetwork.k8s-network.prometheus: http {style.stroke: green}
-s3-plugins-bucket -> vpcnetwork.k8s-network.prometheus: http {style.stroke: green}
+vpcnetwork.k8s-network.search-service -> vpcnetwork.k8s-network.contextualize-service: http {style.stroke: green}
+vpcnetwork.k8s-network.search-service -> vpcnetwork.k8s-network.prometheus: http {style.stroke: green}
+vpcnetwork.k8s-network.search-service -> vpcnetwork.k8s-network.elasticsearch: http {style.stroke: green}
 vpcnetwork.k8s-network.search-service -> vpcnetwork.k8s-network.search-mongodb: nosql-access-protocol {style.stroke: green}
 vpcnetwork.k8s-network.search-service -> vpcnetwork.k8s-network.zoo-keeper: nosql-access-protocol {style.stroke: green}
 vpcnetwork.k8s-network.search-service -> s3-plugins-bucket: https {style.stroke: green}
 vpcnetwork.k8s-network.search-service -> redis: nosql-access-protocol {style.stroke: green}
 vpcnetwork.k8s-network.search-service -> vpcnetwork.k8s-network.play-service: http {style.stroke: green}
-vpcnetwork.k8s-network.search-service -> vpcnetwork.k8s-network.contextualize-service: http {style.stroke: green}
-vpcnetwork.k8s-network.search-service -> vpcnetwork.k8s-network.prometheus: http {style.stroke: green}
-vpcnetwork.k8s-network.search-service -> vpcnetwork.k8s-network.elasticsearch: http {style.stroke: green}
-vpcnetwork.spark-operator -> vpcnetwork.aws-s3-raw-bucket: https {style.stroke: green}
-vpcnetwork.spark-operator -> vpcnetwork.aws-s3-aggregated-bucket: https {style.stroke: green}
-vpcnetwork.spark-operator -> vpcnetwork.elasticsearch-engine: https {style.stroke: green}
-vpcnetwork.spark-operator -> vpcnetwork.k8s-network.prometheus: http {style.stroke: green}
-vpcnetwork.argo-workflows-service -> vpcnetwork.k8s-network.kubernetes-container-platform: https {style.stroke: green}
+s3-plugins-bucket -> vpcnetwork.k8s-network.prometheus: http {style.stroke: green}
+redis -> vpcnetwork.k8s-network.prometheus: http {style.stroke: green}
+vpcnetwork.k8s-network.search-mongodb -> vpcnetwork.k8s-network.prometheus: http {style.stroke: green}
+vpcnetwork.k8s-network.statistic-service -> vpcnetwork.k8s-network.prometheus: http {style.stroke: green}
 vpcnetwork.k8s-network.statistic-service -> vpcnetwork.mongodb-analytics: nosql-access-protocol {style.stroke: green}
 vpcnetwork.k8s-network.statistic-service -> vpcnetwork.k8s-network.tagging-playboard-mongo-db: nosql-access-protocol {style.stroke: green}
 vpcnetwork.k8s-network.statistic-service -> vpcnetwork.k8s-network.qeury-processor: http {style.stroke: green}
-vpcnetwork.k8s-network.statistic-service -> vpcnetwork.k8s-network.prometheus: http {style.stroke: green}
+vpcnetwork.k8s-network.tagging-playboard-mongo-db -> vpcnetwork.k8s-network.prometheus: http {style.stroke: green}
+vpcnetwork.k8s-network.tagging-service -> vpcnetwork.k8s-network.prometheus: http {style.stroke: green}
+vpcnetwork.k8s-network.tagging-service -> vpcnetwork.k8s-network.data-config-service: http {style.stroke: green}
+vpcnetwork.k8s-network.tagging-service -> kinesis: https {style.stroke: green}
+vpcnetwork.k8s-network.tagging-bot-service -> vpcnetwork.k8s-network.prometheus: http {style.stroke: green}
+vpcnetwork.k8s-network.tagging-bot-service -> vpcnetwork.k8s-network.data-config-service: http {style.stroke: green}
+vpcnetwork.k8s-network.tagging-bot-service -> vpcnetwork.k8s-network.elasticsearch: http {style.stroke: green}
+vpcnetwork.k8s-network.tagging-bot-service -> vpcnetwork.k8s-network.tagging-service: http {style.stroke: green}
+vpcnetwork.k8s-network.tagging-enrichment-service -> kinesis: https {style.stroke: green}
+vpcnetwork.k8s-network.tagging-enrichment-service -> vpcnetwork.k8s-network.qeury-processor: https {style.stroke: green}
+vpcnetwork.k8s-network.tagging-enrichment-service -> vpcnetwork.k8s-network.prometheus: http {style.stroke: green}
+vpcnetwork.k8s-network.tagging-enrichment-service -> vpcnetwork.k8s-network.data-config-service: http {style.stroke: green}
+vpcnetwork.k8s-network.tagging-playboard-service -> vpcnetwork.k8s-network.prometheus: http {style.stroke: green}
+vpcnetwork.k8s-network.tagging-playboard-service -> vpcnetwork.k8s-network.tagging-playboard-mongo-db: nosql-access-protocol {style.stroke: green}
 x-archetype -> vpcnetwork.alb: https {style.stroke: green}
 x-archetype -> vpcnetwork.alb: https {style.stroke: green}
 x-archetype -> vpcnetwork.alb: https {style.stroke: green}
 x-archetype -> vpcnetwork.alb: https {style.stroke: green}
-devops-network.devops-publish-network.github-action-pipeline -> devops-network.devops-build-network.git-sourcecode-repository: https {style.stroke: green}
-devops-network.devops-publish-network.github-action-pipeline -> npm-registry: https {style.stroke: green}
+s3-statics-ta.icon: https://img.icons8.com/color/512/amazon-s3.png
+data-feeds-bucket.icon: https://img.icons8.com/color/512/amazon-s3.png
+tooling-feeds-queue.icon: https://www.pngrepo.com/png/353453/180/aws-kinesis.png
+transformed-feeds-bucket.icon: https://img.icons8.com/color/512/amazon-s3.png
+s3-plugins-bucket.icon: https://img.icons8.com/color/512/amazon-s3.png
+kinesis.icon: https://www.pngrepo.com/png/353453/180/aws-kinesis.png
